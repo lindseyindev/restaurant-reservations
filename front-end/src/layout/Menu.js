@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -9,53 +9,84 @@ import { Link } from "react-router-dom";
  */
 
 function Menu() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <nav className="navbar navbar-dark align-items-start p-0">
-      <div className="container-fluid d-flex flex-column p-0">
-        <Link
-          className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
-          to="/"
-        >
-          <div className="sidebar-brand-text mx-3">
-            <span>Periodic Tables</span>
+
+    <>
+    <div className="flex flex-wrap py-2 text-indigo">
+      <div className="w-full px-4">
+        <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-pink-500 rounded">
+          <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+            <div className="w-full relative flex justify-between lg:w-auto px-4 lg:static lg:block lg:justify-start">
+            <Link
+              to="/"
+              className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
+            >
+              <div className="mx-3">
+                
+               Periodic Tables
+              </div>
+            </Link>
+              <button
+                className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+                type="button"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <i className="fas fa-bars"></i>
+              </button>
+            </div>
+            <div
+              className={
+                "lg:flex flex-grow items-center" +
+                (menuOpen ? " flex" : " hidden")
+              }
+              id="example-navbar-info"
+            >
+              <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+                <li className="nav-item">
+                <Link
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                  to="/dashboard"
+                >
+                  <span className="ml-2">
+                  Dashboard
+                  </span>
+                </Link>
+                </li>
+                <li className="nav-item">
+                <Link
+                  to="/search"
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                >
+                  <span className="ml-2">
+                  Search</span>
+                </Link>
+                </li>
+                <li className="nav-item">
+                <Link
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                  to="/reservations/new"
+                >
+                  <span className="ml-2">New Reservation</span>
+                </Link>
+                </li>
+                <li className="nav-item">
+                <Link
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                  to="/tables/new"
+                >
+                 <span className="ml-2"> New Table</span>
+                </Link>
+                </li>
+              </ul>
+            </div>
           </div>
-        </Link>
-        <hr className="sidebar-divider my-0" />
-        <ul className="nav navbar-nav text-light" id="accordionSidebar">
-          <li className="nav-item">
-            <Link className="nav-link" to="/dashboard">
-              <span className="oi oi-dashboard" />
-              &nbsp;Dashboard
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/search">
-              <span className="oi oi-magnifying-glass" />
-              &nbsp;Search
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/reservations/new">
-              <span className="oi oi-plus" />
-              &nbsp;New Reservation
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/tables/new">
-              <span className="oi oi-layers" />
-              &nbsp;New Table
-            </Link>
-          </li>
-        </ul>
-        <div className="text-center d-none d-md-inline">
-          <button
-            className="btn rounded-circle border-0"
-            id="sidebarToggle"
-            type="button"
-          />
-        </div>
+        </nav>
       </div>
-    </nav>
+    </div>
+  </>
+    
   );
 }
 
