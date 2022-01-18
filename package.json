@@ -46,7 +46,7 @@
     "test:frontend:watch": "npm test --prefix ./front-end"
   },
   "keywords": [],
-  "author": "Thinkful, Inc.",
+  "author": "Lindsey Dinkel",
   "license": "UNLICENSED",
   "devDependencies": {
     "tailwindcss": "^3.0.13"
