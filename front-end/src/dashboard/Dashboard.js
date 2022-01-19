@@ -52,14 +52,20 @@ function Dashboard({ date }) {
 
   const resTable = reservations.map((reservation) => {
     return (
-      <tr key={reservation.reservation_id}>
-        <td>{reservation.reservation_id}</td>
+      <table className="table-fixed border-separate border border-indigo-500" key={reservation.reservation_id}>
+      <tr >
+        <td>{`reservation id: ${reservation.reservation_id}`}</td>
         <td>{reservation.first_name}</td>
+        </tr>
+        <tr >
         <td>{reservation.last_name}</td>
         <td>{reservation.mobile_number}</td>
+        </tr>
+        <tr >
         <td>{formatAsTime(reservation.reservation_time)}</td>
         <td>{reservation.people}</td>
       </tr>
+      </table>
     );
   });
 
@@ -68,7 +74,7 @@ function Dashboard({ date }) {
       <h1 className="p-10">Dashboard</h1>
       <div className="p-10 d-md-flex mb-3">
         <h4 className="mb-4">{`Reservations for ${date}`}</h4>
-        <div className="p-2">{resTable}</div>
+        <div className="p-2 bg-emerald-500">{resTable}</div>
         <div className="p-5 inline-flex">
           <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="button" onClick={(e) => handleClick(previous(date))}>
             Previous
