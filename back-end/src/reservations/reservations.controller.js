@@ -1,7 +1,5 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const { next } = require("../../../front-end/src/utils/date-time");
-
 
 /**
  * List handler for reservation resources
@@ -25,7 +23,7 @@ async function create(req, res, next) {
 //regex to validate date and time
 
 function validationReservation(req, res, next) {
- data.reservation_date
+  const { data } = req.body;
   if (!data) {
     return next({ status: 400, message: "Data is missing" });
   }
@@ -51,9 +49,9 @@ function validationReservation(req, res, next) {
       message: "people must be a number",
     });
   }
-/**
- * D a t e   Validation
- */
+  /**
+   * D a t e   Validation
+   */
   const dateFormat = /\d\d\d\d-\d\d-\d\d/;
   const timeFormat = /\d\d:\d\d/;
   if (!data.reservation_date.match(dateFormat)) {
@@ -68,20 +66,28 @@ function validationReservation(req, res, next) {
       message: "reservation_time must be a time",
     });
   }
-  next();
+  /**
+   * US 02 Tuesday and Past Date Validation
+   */
+  let tuesdayCheck = new Date(data.reservation_date)
+  tuesdayCheck = tuesdayCheck.getUTCDay()
+  if (tuesdayCheck == 2) {
+    next({
+      status: 400,
+      message:
+        "reservation_date cannot be a Tuesday when the restaurant is closed",
+    });
+  }
+  let now = new Date()
+  let reservationDateTime = new Date(`${data.reservation_date}T${data.reservation_time}`)
+  if (reservationDateTime < now){
+    next({
+      status: 400,
+      message: "reservation_date must be in the future"
+    }) 
+  }
+    next();
 }
-//var today = new Date();
-// if(today.getDay() == 6 || today.getDay() == 0) alert('Weekend!');
-
-//let tuesdayCheck = new Date();
-if (data.reservation_date.getDay() === 3){
-  next({
-    status: 400,
-    message: "reservation_date cannot be a Tuesday"
-  })
-}
-
-
 
 module.exports = {
   create: [validationReservation, asyncErrorBoundary(create)],
