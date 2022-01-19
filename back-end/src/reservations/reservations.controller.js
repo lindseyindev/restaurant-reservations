@@ -6,8 +6,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
  */
 
 async function list(req, res) {
-  const { date } = req.query;
-  const data = await service.list(date);
+  const data = await service.list(req.query.date);
   res.json({ data });
 }
 
@@ -18,15 +17,15 @@ async function create(req, res, next) {
 
 /**
  * V a l i d a t i o n
- */
-
-//regex to validate date and time
+*/
 
 function validationReservation(req, res, next) {
   const { data } = req.body;
+
   if (!data) {
     return next({ status: 400, message: "Data is missing" });
   }
+
   const requiredFields = [
     "first_name",
     "last_name",
@@ -35,20 +34,23 @@ function validationReservation(req, res, next) {
     "reservation_time",
     "people",
   ];
+
   requiredFields.forEach((field) => {
-    if (!data.field) {
+    if (!data[field]) {
       return next({
         status: 400,
         message: `Reservation must include a ${field}`,
-      });
+      })
     }
-  });
+  })
+
   if (!Number.isInteger(data.people)) {
     return next({
       status: 400,
       message: "people must be a number",
     });
   }
+
   /**
    * D a t e   Validation
    */
@@ -67,32 +69,32 @@ function validationReservation(req, res, next) {
     });
   }
   /**
-   * US 02 Tuesday and Past Date Validation
+   * Tuesday and Past Date Check
    */
-  let tuesdayCheck = new Date(data.reservation_date)
-  tuesdayCheck = tuesdayCheck.getUTCDay()
-  if (tuesdayCheck == 2) {
+  let tuesdayCheck = new Date(data.reservation_date);
+  tuesdayCheck = tuesdayCheck.getUTCDay();
+  if (tuesdayCheck === 2) {
     return next({
       status: 400,
       message:
-        "reservation_date cannot be a Tuesday when the restaurant is closed",
+        "reservation_date cannot be Tuesday when the restaurant is closed",
     });
   }
-  let now = new Date()
-  let reservationDateTime = new Date(`${data.reservation_date}T${data.reservation_time}`)
-  if (reservationDateTime < now){
+
+  let now = new Date();
+  let reservationDateTime = new Date(
+    `${data.reservation_date}T${data.reservation_time}`
+  );
+  if (reservationDateTime < now) {
     return next({
       status: 400,
-      message: "reservation_date must be in the future"
-    }) 
+      message: "reservation_date must be in the future",
+    });
   }
-    next();
+  return next();
 }
 
 module.exports = {
-  create: [validationReservation, asyncErrorBoundary(create)],
   list: [asyncErrorBoundary(list)],
+  create: [validationReservation, asyncErrorBoundary(create)],
 };
-//revisit later
-//update: [asyncErrorBoundary(reviewExists), hasValidProperties, update],
-//delete: [asyncErrorBoundary(reviewExists), destroy],
