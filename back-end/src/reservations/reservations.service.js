@@ -8,10 +8,10 @@ function create(newReservation) {
     .then((data) => data[0])
   }
 
-  function list(reservation_date) {
+  function list(date) {
     return knex("reservations")
     .select("*")
-    .where({"reservation_date" : reservation_date})
+    .where({"reservation_date" : date})
     .orderBy("reservation_time")
   }
 

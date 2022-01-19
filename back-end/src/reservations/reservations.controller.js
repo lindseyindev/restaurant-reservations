@@ -1,5 +1,6 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const { next } = require("../../../front-end/src/utils/date-time");
 
 
 /**
@@ -24,7 +25,7 @@ async function create(req, res, next) {
 //regex to validate date and time
 
 function validationReservation(req, res, next) {
-  const { data } = req.body;
+ data.reservation_date
   if (!data) {
     return next({ status: 400, message: "Data is missing" });
   }
@@ -37,7 +38,7 @@ function validationReservation(req, res, next) {
     "people",
   ];
   requiredFields.forEach((field) => {
-    if (!data[field]) {
+    if (!data.reservation_date) {
       return next({
         status: 400,
         message: `Reservation must include a ${field}`,
@@ -69,6 +70,18 @@ function validationReservation(req, res, next) {
   }
   next();
 }
+//var today = new Date();
+// if(today.getDay() == 6 || today.getDay() == 0) alert('Weekend!');
+
+//let tuesdayCheck = new Date();
+if (data.reservation_date.getDay() === 3){
+  next({
+    status: 400,
+    message: "reservation_date cannot be a Tuesday"
+  })
+}
+
+
 
 module.exports = {
   create: [validationReservation, asyncErrorBoundary(create)],

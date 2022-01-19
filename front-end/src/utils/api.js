@@ -67,3 +67,16 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+
+export async function createReservations(reservation, signal){
+  const url = new URL(`${API_BASE_URL}/reservations`)
+  return await fetchJson(url, {
+    headers,
+    signal,
+    method: "POST",
+    body: JSON.stringify({data: reservation})
+  })
+}
+
+//create reservation, using fetch json passing in an options ojbect with header, signal, method, body
