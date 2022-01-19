@@ -75,11 +75,7 @@ return (
 
 
 
-
-
-
 )
-
 }
 
 export default NewReservations
