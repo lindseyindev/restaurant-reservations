@@ -1,75 +1,179 @@
-import React, {useState} from "react"
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { createReservations } from "../utils/api";
+import ErrorAlert from "./ErrorAlert";
 
-function NewReservations(){
+function NewReservations() {
+  const initialState = {
+    "first_name": "",
+    "last_name": "",
+    "mobile_number": "",
+    "reservation_date": "",
+    "reservation_time": "",
+    "people": 0,
+  };
 
+  const history = useHistory();
+  const [error, setError] = useState(null);
+  const [reservation, setReservation] = useState(initialState);
 
+  function changeHandler({ target: { name, value } }) {
+    setReservation((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+  function submitHandler(e) {
+    console.log(reservation)
+    reservation.people = Number(reservation.people)
+    e.preventDefault();
+    let abortController = new AbortController();
+    async function newReservation() {
+      try {
+        await createReservations(reservation, abortController.signal)
+        let date = reservation.reservation_date
+        setReservation(initialState)
+        history.push(`/dashboard?date=${date}`)
+      } catch (error) {
+        setError(error);
+      }
+    }
+    newReservation();
+    return () => {
+      abortController.abort();
+    };
+  }
+ 
 
-return (
-
-<form class="w-full max-w-lg">
-  <div class="flex flex-wrap -mx-3 mb-6">
-    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-        First Name
-      </label>
-      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane"/>
-      <p class="text-red-500 text-xs italic">Please fill out this field.</p>
-    </div>
-    <div class="w-full md:w-1/2 px-3">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-        Last Name
-      </label>
-      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe"/>
-    </div>
-  </div>
-  <div class="flex flex-wrap -mx-3 mb-6">
-    <div class="w-full px-3">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-        Password
-      </label>
-      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="******************"/>
-      <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
-    </div>
-  </div>
-  <div class="flex flex-wrap -mx-3 mb-2">
-    <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
-        City
-      </label>
-      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Albuquerque"/>
-    </div>
-    <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-        State
-      </label>
-      <div class="relative">
-        <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-          <option>New Mexico</option>
-          <option>Missouri</option>
-          <option>Texas</option>
-        </select>
-        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+  return (
+    <div>
+      <ErrorAlert error={error} /> 
+      <form className="form w-full max-w-lg"  onSubmit={(e) => submitHandler(e)}>
+        <div className="flex flex-wrap mx-3 mb-6">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="grid-first-name"
+            >
+              First Name
+            </label>
+            <input
+              name="first_name"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+              id="first-name"
+              type="text"
+              value={reservation.first_name}
+              placeholder="First Name"
+              onChange={(e) => changeHandler(e)}
+            />
+            <p className="text-red-500 text-xs italic">
+              Please fill out this field.
+            </p>
+          </div>
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="grid-last-name"
+            >
+              Last Name
+            </label>
+            <input
+              name="last_name"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="last-name"
+              type="text"
+              value={reservation.last_name}
+              placeholder="Last Name"
+              onChange={(e) => changeHandler(e)}
+            />
+          </div>
         </div>
-      </div>
+        <div className="flex flex-wrap mx-3 mb-6">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="grid-mobile-number"
+            >
+              Mobile Number
+            </label>
+            <input
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+              placeholder="000-000-0000"
+              name="mobile_number"
+              type="tel"
+              id="mobile_number"
+              value={reservation.mobile_number}
+              onChange={(e) => changeHandler(e)}
+            />
+            <p className="text-gray-600 text-xs italic">
+              Please use the format 000-000-0000{" "}
+            </p>
+          </div>
+          <div className="w-full md:w-1/2 px-3">
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="grid-mobile-people"
+            >
+              Party Size
+            </label>
+            <input
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+              name="people"
+              id="people"
+              type="number"
+              min="0"
+              value={reservation.people}
+              placeholder="1"
+              onChange={(e) => changeHandler(e)}
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap mx-3 mb-2">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="grid-reservation-date"
+            >
+              Reservation Date
+            </label>
+            <input
+              name="reservation_date"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="date"
+              type="date"
+              value={reservation.reservation_date}
+              onChange={(e) => changeHandler(e)}
+            />
+          </div>
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="grid-reservation-time"
+            >
+              Reservation Time
+            </label>
+            <input
+              name="reservation_time"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="time"
+              type="time"
+              value={reservation.reservation_time}
+              onChange={(e) => changeHandler(e)}
+            />
+          </div>
+        </div>
+      <button
+        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+        type="submit"
+      >
+        Submit
+      </button>
+      <button type="button" onClick={(e) => history.goBack()}>
+        Cancel
+      </button>
+      </form>
     </div>
-    <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
-        Zip
-      </label>
-      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-zip" type="text" placeholder="90210"/>
-    </div>
-  </div>
-</form>
-
-
-
-
-
-
-
-)
-
+  );
 }
 
-export default NewReservations
+export default NewReservations;
