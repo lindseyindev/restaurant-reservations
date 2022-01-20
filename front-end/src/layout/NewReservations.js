@@ -24,8 +24,7 @@ function NewReservations() {
     }));
   }
   function submitHandler(e) {
-    console.log(reservation)
-    reservation.people = Number(reservation.people)
+  reservation.people = Number(reservation.people)
     e.preventDefault();
     let abortController = new AbortController();
     async function newReservation() {
@@ -43,7 +42,6 @@ function NewReservations() {
       abortController.abort();
     };
   }
- 
 
   return (
     <div>
