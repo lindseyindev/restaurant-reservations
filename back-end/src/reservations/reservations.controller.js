@@ -2,6 +2,21 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 /**
+ *
+ * Helper Functions
+ */
+function asDateString(date) {
+  return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
+    .toString(10)
+    .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
+}
+
+function today() {
+  return asDateString(new Date());
+}
+//console.log(today()) 2022-01-20
+
+/**
  * List handler for reservation resources
  */
 
@@ -17,7 +32,7 @@ async function create(req, res, next) {
 
 /**
  * V a l i d a t i o n
-*/
+ */
 
 function validationReservation(req, res, next) {
   const { data } = req.body;
@@ -40,9 +55,9 @@ function validationReservation(req, res, next) {
       return next({
         status: 400,
         message: `Reservation must include a ${field}`,
-      })
+      });
     }
-  })
+  });
 
   if (!Number.isInteger(data.people)) {
     return next({
@@ -91,6 +106,20 @@ function validationReservation(req, res, next) {
       message: "reservation_date must be in the future",
     });
   }
+  /**
+   * T I M E   Validation
+   */
+
+  if ("10:30" > data.reservation_time || data.reservation_time > "21:30") {
+    return next({
+      status: 400,
+      message:
+        "reservation_time cannot be before 10:30AM or after 9:30PM",
+    });
+  }
+
+ 
+
   return next();
 }
 
