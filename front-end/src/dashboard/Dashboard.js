@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 //import {formatTime} from "../utils/format-reservation-time";
 //import formatAsDate from "../utils/format-reservation-date";
-import {previous, next, today, formatAsTime} from "../utils/date-time";
-
+import {
+  previous,
+  next,
+  today,
+  formatAsTime,
+  formatAsDate,
+} from "../utils/date-time";
 
 /* Defines the dashboard page.
  * @param date
@@ -21,51 +26,89 @@ function Dashboard({ date }) {
   if (getDate) {
     date = getDate;
   } else {
-    date = today()
+    date = today();
   }
 
   const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [error, setError] = useState(null);
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadReservations, [date]);
+  useEffect(loadTables, []);
 
-  function loadDashboard() {
+  function loadReservations() {
     const abortController = new AbortController();
-    setReservationsError(null);
+    setError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      .catch(setError);
     return () => abortController.abort();
   }
 
+  function loadTables() {
+    const abortController = new AbortController();
+    setError(null)
+    listTables(abortController.signal).then(setTables).catch(setError)
+    return () => abortController.abort()
+  }
 
   const history = useHistory();
- 
 
   function pushDate(dateToMove) {
     history.push(`/dashboard?date=${dateToMove}`);
   }
 
-  function handleClick(nextOrPrev){
-    pushDate(nextOrPrev)
+  function handleClick(nextOrPrev) {
+    pushDate(nextOrPrev);
   }
 
-  const resTable = reservations.map((reservation) => {
+  const displayReservations = reservations.map((reservation) => {
     return (
-      <table className="table-fixed border-separate border border-indigo-500" key={reservation.reservation_id}>
-      <tr >
-        <td>{`reservation id: ${reservation.reservation_id}`}</td>
-        <td>{reservation.first_name}</td>
+      <div>
+        <tr>
+          <th>{`reservation id: ${reservation.reservation_id}`}</th>
         </tr>
-        <tr >
-        <td>{reservation.last_name}</td>
-        <td>{reservation.mobile_number}</td>
+        <th>Name</th>
+        <tr>
+          <td>{reservation.first_name}</td>
         </tr>
-        <tr >
-        <td>{formatAsTime(reservation.reservation_time)}</td>
-        <td>{reservation.people}</td>
-      </tr>
-      </table>
+        <tr>
+          <td>{reservation.last_name}</td>
+        </tr>
+        <th>Phone</th>
+        <tr>
+          <td>{reservation.mobile_number}</td>
+        </tr>
+        <th>Reservation Date and Time</th>
+        <tr>
+          <td>
+            {formatAsDate(reservation.reservation_date)}{" "}
+            {formatAsTime(reservation.reservation_time)}
+          </td>
+        </tr>
+        <th>Party Size</th>
+        <tr>
+          <td>{reservation.people}</td>
+        </tr>
+        <button
+          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+          href={`/reservations/${reservation.reservation_id}/seat`}
+        >
+          Seat
+        </button>
+      </div>
+    );
+  });
+
+  const displayTables = tables.map((table, index) => {
+    return (
+      <div key={index}>
+        <li>Table Name: {table.table_name}</li>
+        <li>Capacity: {table.capacity}</li>
+        <li data-table-id-status={table.table_id}>
+          Free or Occupied Placeholder...
+        </li>
+      </div>
     );
   });
 
@@ -74,18 +117,34 @@ function Dashboard({ date }) {
       <h1 className="p-10">Dashboard</h1>
       <div className="p-10 d-md-flex mb-3">
         <h4 className="mb-4">{`Reservations for ${date}`}</h4>
-        <div className="p-2 bg-emerald-500">{resTable}</div>
+        <div className="p-2 bg-emerald-500">
+          <table className="table-fixed border-separate border border-indigo-500">
+            {displayReservations}
+          </table>
+        </div>
+        <div className="p-2 bg-indigo-200">
+          <ol className="table-fixed border-separate border border-emerald-500">
+            {displayTables}
+          </ol>
+        </div>
         <div className="p-5 inline-flex">
-          <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="button" onClick={(e) => handleClick(previous(date))}>
+          <button
+            className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            type="button"
+            onClick={(e) => handleClick(previous(date))}
+          >
             Previous
           </button>
-          <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="button" onClick={(e) => handleClick(next(date))}>
+          <button
+            className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            type="button"
+            onClick={(e) => handleClick(next(date))}
+          >
             Next
           </button>
         </div>
-      
       </div>
-      <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={error} />
       {JSON.stringify(reservations)}
     </main>
   );

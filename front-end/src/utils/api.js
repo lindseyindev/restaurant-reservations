@@ -68,15 +68,41 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
-
-export async function createReservations(reservation, signal){
-  const url = new URL(`${API_BASE_URL}/reservations`)
+export async function createReservations(reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
   return await fetchJson(url, {
     headers,
     signal,
     method: "POST",
-    body: JSON.stringify({data: reservation})
-  })
+    body: JSON.stringify({ data: reservation }),
+  }, []);
 }
 
 //create reservation, using fetch json passing in an options ojbect with header, signal, method, body
+
+export async function createTable(table, signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+  return await fetchJson(url, options, table);
+}
+
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { signal }, []);
+}
+
+export async function updateTables(reservationId, table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  return await fetchJson(url, {
+    headers,
+    signal,
+    method: "PUT",
+    body: JSON.stringify({ data: { reservation_id: reservationId } }),
+  });
+}

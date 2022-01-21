@@ -122,8 +122,33 @@ function validationReservation(req, res, next) {
 
   return next();
 }
+function hasReservationId(req, res, next) {
+  const reservation = req.params.reservation_id || req.body?.data?.reservation_id;
+
+  if(reservation){
+      res.locals.reservation_id = reservation;
+      next();
+  } else {
+      next({
+          status: 400,
+          message: `missing reservation_id`,
+      });
+  }
+}
+
+async function reservationExists(req, res, next) {
+  const reservation_id = res.locals.reservation_id;
+  const reservation = await service.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    next();
+  } else {
+    next({status: 404, message: `Reservation not found: ${reservation_id}`});
+  }
+}
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validationReservation, asyncErrorBoundary(create)],
+  reservationExists: [hasReservationId, reservationExists]
 };

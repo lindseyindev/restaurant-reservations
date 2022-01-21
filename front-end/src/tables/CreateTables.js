@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 // import { createReservations } from "../utils/api";
-// import ErrorAlert from "./ErrorAlert";
+import ErrorAlert from "../layout/ErrorAlert"
+import { createTable } from "../utils/api";
+import { today } from "../utils/date-time";
 
 function CreateTables(){
     const initialState = {
         "table_name": "",
-        "capacity": 1,
+        "capacity": 0,
       };
     
       const history = useHistory();
@@ -19,25 +21,47 @@ function CreateTables(){
           [name]: value,
         }));
       }
-      function submitHandler(e) {
-      table.capacity = Number(table.capacity)
-        e.preventDefault();
-        let abortController = new AbortController();
-        async function newTable() {
-          try {
-            await createReservations(table, abortController.signal)
-            //let date = reservation.reservation_date
-            setTable(initialState)
-            history.push(`/dashboard`)
-          } catch (error) {
-            setError(error);
-          }
-        }
-        newTable();
-        return () => {
-          abortController.abort();
-        };
+
+      function changeHandlerNum({ target: { name, value } }) {
+        setTable((prevState) => ({
+          ...prevState,
+          [name]: Number(value),
+        }));
       }
+
+
+      function submitHandler(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setError(error);
+
+        createTable(table)
+           .then(() => {
+             history.push(`/dashboard?date=${today()}`);
+           })
+           .catch(setError);
+
+      }
+
+      // function submitHandler(e) {
+      // table.capacity = Number(table.capacity)
+      //   e.preventDefault();
+      //   let abortController = new AbortController();
+      //   async function newTable() {
+      //     try {
+      //       await createReservations(table, abortController.signal)
+      //       //let date = reservation.reservation_date
+      //       setTable(initialState)
+      //       history.push(`/dashboard`)
+      //     } catch (error) {
+      //       setError(error);
+      //     }
+      //   }
+      //   newTable();
+      //   return () => {
+      //     abortController.abort();
+      //   };
+      // }
     
       return (
         <div>
@@ -77,10 +101,10 @@ function CreateTables(){
                   name="capacity"
                   id="capacity"
                   type="number"
-                  min="1"
+                  min={1}
                   value={table.capacity}
                   placeholder="1"
-                  onChange={(e) => changeHandler(e)}
+                  onChange={(e) => changeHandlerNum(e)}
                   required
                 />
               </div>
