@@ -5,6 +5,9 @@ import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 //import {formatTime} from "../utils/format-reservation-time";
 //import formatAsDate from "../utils/format-reservation-date";
+import Occupied from "./Occupied"
+
+
 import {
   previous,
   next,
@@ -47,6 +50,7 @@ function Dashboard({ date }) {
 
   function loadTables() {
     const abortController = new AbortController();
+    console.log("testing loadTables")
     setError(null)
     listTables(abortController.signal).then(setTables).catch(setError)
     return () => abortController.abort()
@@ -90,12 +94,12 @@ function Dashboard({ date }) {
         <tr>
           <td>{reservation.people}</td>
         </tr>
-        <button
+        <a
           className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
           href={`/reservations/${reservation.reservation_id}/seat`}
         >
           Seat
-        </button>
+        </a>
       </div>
     );
   });
@@ -106,8 +110,9 @@ function Dashboard({ date }) {
         <li>Table Name: {table.table_name}</li>
         <li>Capacity: {table.capacity}</li>
         <li data-table-id-status={table.table_id}>
-          Free or Occupied Placeholder...
+        {table.reservation_id ? <Occupied table_id={table.table_id} /> : "Free"}
         </li>
+        
       </div>
     );
   });
@@ -127,7 +132,7 @@ function Dashboard({ date }) {
             {displayTables}
           </ol>
         </div>
-        <div className="p-5 inline-flex">
+        <div className="m-auto">
           <button
             className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
             type="button"

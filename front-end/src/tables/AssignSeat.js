@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import {updateTable, updateTables} from "../utils/api"
+import { updateTables, listTables } from "../utils/api"
 
 function AssignSeat() {
   const history = useHistory();
   const [error, setError] = useState(null);
   const [tables, setTables] = useState([]);
   const [selectTable, setSelectTable] = useState()
-  const { reservationId } = useParams();
+  const { reservation_id } = useParams();
 
   
   function changeHandler({ target: { name, value } }) {
@@ -17,12 +17,23 @@ function AssignSeat() {
       [name]: value,
     }));
   }
+
+  useEffect(loadTables, []);
+
+  function loadTables() {
+    const abortController = new AbortController();
+    setError(null)
+    listTables(abortController.signal).then(setTables).catch(setError)
+    return () => abortController.abort()
+  }
+
+
   function submitHandler(e) {
     e.preventDefault();
     let abortController = new AbortController();
     async function assignTable() {
       try {
-        await updateTables(reservationId, selectTable, abortController.signal)
+        await updateTables(Number(reservation_id), selectTable, abortController.signal)
         history.push(`/dashboard`)
       } catch (error) {
         setError(error);

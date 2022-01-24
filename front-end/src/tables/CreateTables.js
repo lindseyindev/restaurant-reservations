@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 // import { createReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert"
-import { createTable } from "../utils/api";
+import { createTables } from "../utils/api";
 import { today } from "../utils/date-time";
 
 function CreateTables(){
@@ -35,12 +35,11 @@ function CreateTables(){
         e.stopPropagation();
         setError(error);
 
-        createTable(table)
+        createTables(table)
            .then(() => {
              history.push(`/dashboard?date=${today()}`);
            })
            .catch(setError);
-
       }
 
       // function submitHandler(e) {
@@ -73,7 +72,7 @@ function CreateTables(){
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-first-name"
                 >
-                  TableName
+                  Table Name
                 </label>
                 <input
                   name="table_name"

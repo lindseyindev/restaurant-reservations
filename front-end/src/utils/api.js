@@ -80,7 +80,7 @@ export async function createReservations(reservation, signal) {
 
 //create reservation, using fetch json passing in an options ojbect with header, signal, method, body
 
-export async function createTable(table, signal) {
+export async function createTables(table, signal) {
   const url = `${API_BASE_URL}/tables`;
   const options = {
     method: "POST",
@@ -94,7 +94,11 @@ export async function createTable(table, signal) {
 
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
-  return await fetchJson(url, { signal }, []);
+  return await fetchJson(url, {
+    headers,
+    signal,
+    method: 'GET',
+  })
 }
 
 export async function updateTables(reservationId, table_id, signal) {
@@ -105,4 +109,13 @@ export async function updateTables(reservationId, table_id, signal) {
     method: "PUT",
     body: JSON.stringify({ data: { reservation_id: reservationId } }),
   });
+}
+
+export async function finishTable(table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  return await fetchJson(url, {
+    headers,
+    signal,
+    method: 'DELETE',
+  })
 }
