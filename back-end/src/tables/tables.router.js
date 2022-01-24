@@ -21,9 +21,13 @@ const methodNotAllowed = require("../errors/methodNotAllowed");
 router.route("/")
   .post(controller.create)
   .get(controller.list).all(methodNotAllowed);
+
+
 //router.route("/:table_id").get(controller.read).all();
+
+
 router.route("/:table_id/seat")
-  .put(reservationController.reservationExists, controller.seat)
-  .delete(controller.occupy).all(methodNotAllowed);
+  .put(reservationController.reservationExists, controller.update)
+  .delete(controller.destroy).all(methodNotAllowed);
   
 module.exports = router;

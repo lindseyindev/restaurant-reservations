@@ -123,11 +123,11 @@ async function read(req, res) {
 
 function hasCapacity(req, res, next) {
   const tableCapacity = res.locals.table.capacity;
-  const guests = res.locals.reservation.people;
-  if ( tableCapacity < guests ) {
+  const reservationPeople = res.locals.reservation.people;
+  if ( tableCapacity < reservationPeople ) {
     next({
       status: 400,
-      message: `Too many guests ( ${guests} ) for table size. Please choose table with capacity.`,
+      message: `Too many guests ( ${reservationPeople} ) for table size. Please choose table with capacity.`,
     });
   } else {
     next();
@@ -135,7 +135,7 @@ function hasCapacity(req, res, next) {
 }
 
 async function seat(req, res) {
-  const data = await service.seat(res.locals.table.table_id, res.locals.reservation.reservation_id);
+  const data = await service.seat(Number(res.locals.table.table_id), Number(res.locals.reservation.reservation_id));
   res.json({
     data,
   });
@@ -164,11 +164,8 @@ function isOccupied(req, res, next) {
   }
 }
 
-async function occupy(req, res) {
-    console.log("DEBUG FINISH");
-    console.log(res.locals.table);
+async function destroy(req, res) {
   const data = await service.occupy(res.locals.table);
-
   res.json({
     data,
   });
@@ -207,7 +204,7 @@ module.exports = {
   ],
   read: [hasTableId, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
-  seat: [tableExists, isAvailable, hasCapacity, isBooked, seat],
-  occupy: [tableExists, isOccupied, occupy]
+  update: [tableExists, isAvailable, hasCapacity, isBooked, seat],
+  destroy: [tableExists, isOccupied, destroy]
 };
   

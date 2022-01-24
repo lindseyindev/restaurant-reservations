@@ -123,10 +123,10 @@ function validationReservation(req, res, next) {
   return next();
 }
 function hasReservationId(req, res, next) {
-  const reservation = req.params.reservation_id || req.body?.data?.reservation_id;
+  const reservation_id = req.params.reservationId || req.body?.data?.reservation_id;
 
-  if(reservation){
-      res.locals.reservation_id = reservation;
+  if(reservation_id){
+      res.locals.reservation_id = reservation_id;
       next();
   } else {
       next({
@@ -147,8 +147,16 @@ async function reservationExists(req, res, next) {
   }
 }
 
+async function read(req, res) {
+  const data = res.locals.reservation;
+  res.status(200).json({
+    data,
+  })
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validationReservation, asyncErrorBoundary(create)],
-  reservationExists: [hasReservationId, reservationExists]
+  reservationExists: [hasReservationId, reservationExists],
+  read: [hasReservationId, reservationExists, asyncErrorBoundary(read)]
 };
