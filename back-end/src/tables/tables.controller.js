@@ -5,7 +5,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 //     let data = await service.list();
 //     res.json({ data });
 //   }
-  
+
 //  async function update(req, res, next){
 //         const updatedTable = {
 //           reservationId: req.body.data.reservation_id,
@@ -13,37 +13,29 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 //         };
 //         let data = await service.update(updatedTable)
 //         res.json({ data });
-//  } 
+//  }
 
 /**
  * V a l i d a t i o n
  */
 
-
 //if reservation.status === booked
-
 
 //if table.capacity < reservation.people
 
-
-
-  // module.exports = {
-  //   list: asyncErrorBoundary(list),
-  //   update: update,
-  // };
-
+// module.exports = {
+//   list: asyncErrorBoundary(list),
+//   update: update,
+// };
 
 //////
 
 function hasValidFields(req, res, next) {
   const { data = {} } = req.body;
-  const validFields = new Set([
-    "table_name",
-    "capacity",
-  ]);
+  const validFields = new Set(["table_name", "capacity"]);
 
   const invalidFields = Object.keys(data).filter(
-    field => !validFields.has(field)
+    (field) => !validFields.has(field)
   );
 
   if (invalidFields.length)
@@ -57,14 +49,14 @@ function hasValidFields(req, res, next) {
 function hasTableId(req, res, next) {
   const table = req.params.table_id;
   console.log(table);
-  if(table){
-      res.locals.reservation = table;
-      next();
+  if (table) {
+    res.locals.reservation = table;
+    next();
   } else {
-      next({
-          status: 400,
-          message: `missing table_id`,
-      });
+    next({
+      status: 400,
+      message: `missing table_id`,
+    });
   }
 }
 
@@ -81,27 +73,26 @@ function bodyDataHas(propertyName) {
 const has_table_name = bodyDataHas("table_name");
 const has_capacity = bodyDataHas("capacity");
 
-function isValidTableName(req, res, next){
+function isValidTableName(req, res, next) {
   const { data = {} } = req.body;
-  if (data['table_name'].length < 2){
-      return next({ status: 400, message: `table_name length is too short.` });
+  if (data["table_name"].length < 2) {
+    return next({ status: 400, message: `table_name length is too short.` });
   }
   next();
 }
 
-function isValidNumber(req, res, next){
+function isValidNumber(req, res, next) {
   const { data = {} } = req.body;
-  if ('capacity' in data){
-      if (data['capacity'] === 0 || !Number.isInteger(data['capacity'])){
-          return next({ status: 400, message: `capacity must be a number.` });
-      }
+  if ("capacity" in data) {
+    if (data["capacity"] === 0 || !Number.isInteger(data["capacity"])) {
+      return next({ status: 400, message: `capacity must be a number.` });
+    }
   }
   next();
 }
 
 async function list(req, res) {
   const data = await service.list(req.query.date);
-
   res.json({
     data,
   });
@@ -118,13 +109,13 @@ async function read(req, res) {
   const data = res.locals.reservation;
   res.status(200).json({
     data,
-  })
+  });
 }
 
 function hasCapacity(req, res, next) {
   const tableCapacity = res.locals.table.capacity;
   const reservationPeople = res.locals.reservation.people;
-  if ( tableCapacity < reservationPeople ) {
+  if (tableCapacity < reservationPeople) {
     next({
       status: 400,
       message: `Too many guests ( ${reservationPeople} ) for table size. Please choose table with capacity.`,
@@ -135,7 +126,10 @@ function hasCapacity(req, res, next) {
 }
 
 async function seat(req, res) {
-  const data = await service.seat(Number(res.locals.table.table_id), Number(res.locals.reservation.reservation_id));
+  const data = await service.seat(
+    Number(res.locals.table.table_id),
+    Number(res.locals.reservation.reservation_id)
+  );
   res.json({
     data,
   });
@@ -195,16 +189,14 @@ function isBooked(req, res, next) {
 }
 module.exports = {
   create: [
-      has_table_name,
-      has_capacity,
-      isValidTableName,
-      isValidNumber,
-//      hasValidFields,
-      asyncErrorBoundary(create)
+    has_table_name,
+    has_capacity,
+    isValidTableName,
+    isValidNumber,
+    asyncErrorBoundary(create),
   ],
   read: [hasTableId, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
   update: [tableExists, isAvailable, hasCapacity, isBooked, seat],
-  destroy: [tableExists, isOccupied, destroy]
+  destroy: [tableExists, isOccupied, destroy],
 };
-  

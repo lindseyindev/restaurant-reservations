@@ -101,17 +101,17 @@ export async function listTables(signal) {
   })
 }
 
-export async function updateTables(reservationId, table_id, signal) {
+export async function updateTables(reservation_id, table_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   return await fetchJson(url, {
     headers,
     signal,
     method: "PUT",
-    body: JSON.stringify({ data: { reservation_id: reservationId } }),
+    body: JSON.stringify({ data: { reservation_id: Number(reservation_id) } }),
   });
 }
 
-export async function finishTable(table_id, signal) {
+export async function finishTables(table_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   return await fetchJson(url, {
     headers,
@@ -119,3 +119,14 @@ export async function finishTable(table_id, signal) {
     method: 'DELETE',
   })
 }
+
+export async function updateStatus(reservation_id, status, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+ return await fetchJson(url, {
+   headers,
+   signal,
+   method: 'PUT',
+   body: JSON.stringify({data: { status }})
+ })
+}
+

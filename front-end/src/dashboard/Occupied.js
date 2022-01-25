@@ -1,24 +1,18 @@
 import React from "react";
-import { finishTable } from "../utils/api";
+import { finishTables } from "../utils/api";
 import { useHistory } from "react-router-dom";
-
-
-
 
 function Occupied({ table_id }) {
   const history = useHistory();
 
-
-
-
   async function handleClick(e) {
     if (
       window.confirm(
-        'Is this table ready to seat new guests? This cannot be undone.'
+        "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
       const abortController = new AbortController();
-      await finishTable(table_id, abortController.signal);
+      await finishTables(table_id, abortController.signal);
       history.push("/");
       return () => abortController.abort();
     }

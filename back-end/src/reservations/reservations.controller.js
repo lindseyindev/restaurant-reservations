@@ -59,6 +59,13 @@ function validationReservation(req, res, next) {
     }
   });
 
+  if(data.status === "seated" || data.status === "finished"){
+      return next({
+        status: 400,
+        message: `Status cannot be ${data.status}`,
+      });
+  }
+
   if (!Number.isInteger(data.people)) {
     return next({
       status: 400,
@@ -113,26 +120,24 @@ function validationReservation(req, res, next) {
   if ("10:30" > data.reservation_time || data.reservation_time > "21:30") {
     return next({
       status: 400,
-      message:
-        "reservation_time cannot be before 10:30AM or after 9:30PM",
+      message: "reservation_time cannot be before 10:30AM or after 9:30PM",
     });
   }
-
- 
 
   return next();
 }
 function hasReservationId(req, res, next) {
-  const reservation_id = req.params.reservationId || req.body?.data?.reservation_id;
+  const reservation_id =
+    req.params.reservation_id || req.body?.data?.reservation_id;
 
-  if(reservation_id){
-      res.locals.reservation_id = reservation_id;
-      next();
+  if (reservation_id) {
+    res.locals.reservation_id = reservation_id;
+    next();
   } else {
-      next({
-          status: 400,
-          message: `missing reservation_id`,
-      });
+    next({
+      status: 400,
+      message: `missing reservation_id`,
+    });
   }
 }
 
@@ -143,20 +148,33 @@ async function reservationExists(req, res, next) {
     res.locals.reservation = reservation;
     next();
   } else {
-    next({status: 404, message: `Reservation not found: ${reservation_id}`});
+    next({ status: 404, message: `Reservation not found: ${reservation_id}` });
   }
 }
 
 async function read(req, res) {
   const data = res.locals.reservation;
-  res.status(200).json({
-    data,
-  })
+  res.status(200).json({data});
 }
+
+async function update(req, res, next) {
+  const {reservation_id} = req.params;
+  const data = await service.update(reservation_id, req.body.data.status);
+  res.status(200).json({data})
+}
+
+async function validateStatus(req, res, next){
+  const status = req.body.data.status
+  if (status === "finished"){
+    next({ status: 404, message: `A finished reservation cannot be updated` });
+  }
+}
+
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validationReservation, asyncErrorBoundary(create)],
   reservationExists: [hasReservationId, reservationExists],
-  read: [hasReservationId, reservationExists, asyncErrorBoundary(read)]
+  read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],
+  update: [hasReservationId, reservationExists, asyncErrorBoundary(update)]
 };

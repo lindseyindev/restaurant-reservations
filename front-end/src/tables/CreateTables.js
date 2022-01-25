@@ -29,38 +29,25 @@ function CreateTables(){
         }));
       }
 
-
       function submitHandler(e) {
+      table.capacity = Number(table.capacity)
         e.preventDefault();
-        e.stopPropagation();
-        setError(error);
-
-        createTables(table)
-           .then(() => {
-             history.push(`/dashboard?date=${today()}`);
-           })
-           .catch(setError);
+        let abortController = new AbortController();
+        async function newTable() {
+          try {
+            await createTables(table, abortController.signal)
+            //let date = reservation.reservation_date
+            setTable(initialState)
+            history.push(`/dashboard?date=${today()}`)
+          } catch (error) {
+            setError(error);
+          }
+        }
+        newTable();
+        return () => {
+          abortController.abort();
+        };
       }
-
-      // function submitHandler(e) {
-      // table.capacity = Number(table.capacity)
-      //   e.preventDefault();
-      //   let abortController = new AbortController();
-      //   async function newTable() {
-      //     try {
-      //       await createReservations(table, abortController.signal)
-      //       //let date = reservation.reservation_date
-      //       setTable(initialState)
-      //       history.push(`/dashboard`)
-      //     } catch (error) {
-      //       setError(error);
-      //     }
-      //   }
-      //   newTable();
-      //   return () => {
-      //     abortController.abort();
-      //   };
-      // }
     
       return (
         <div>
