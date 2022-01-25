@@ -21,13 +21,29 @@ function today() {
  */
 
 async function list(req, res) {
-  const data = await service.list(req.query.date);
+  let data = await service.list(req.query.date);
+  console.log(data)
+  data = data.filter((reservation) => reservation.status !=="finished")
+  // if(res.locals.reservation.status === "finished"){
+  //   res.status(200).json({data: {}})
+  //     }
   res.json({ data });
 }
 
 async function create(req, res, next) {
   const data = await service.create(req.body.data);
   res.status(201).json({ data });
+}
+
+//Search
+async function listByNumber(req, res, next){
+   const { mobile_number } = req.query
+   if(mobile_number){
+     const data = await service.search(mobile_number)
+     return res.status(200).json({ data })
+   } else {
+     return next()
+   }
 }
 
 /**
@@ -129,7 +145,6 @@ function validationReservation(req, res, next) {
 function hasReservationId(req, res, next) {
   const reservation_id =
     req.params.reservation_id || req.body?.data?.reservation_id;
-
   if (reservation_id) {
     res.locals.reservation_id = reservation_id;
     next();
@@ -154,6 +169,7 @@ async function reservationExists(req, res, next) {
 
 async function read(req, res) {
   const data = res.locals.reservation;
+ 
   res.status(200).json({data});
 }
 
@@ -165,16 +181,21 @@ async function update(req, res, next) {
 
 async function validateStatus(req, res, next){
   const status = req.body.data.status
-  if (status === "finished"){
-    next({ status: 404, message: `A finished reservation cannot be updated` });
+  const {reservation_id} = req.params
+  const checkReservation = await service.read(reservation_id)
+  if (checkReservation.status === "finished"){
+    next({ status: 400, message: `A finished reservation cannot be updated.` });
   }
+ if (status !== "seated" && status !== "booked" && status !== "finished"){
+    return next({ status: 400, message: `Invalid status: ${status}` });
+  }
+   next()
 }
 
-
 module.exports = {
-  list: [asyncErrorBoundary(list)],
+  list: [asyncErrorBoundary(listByNumber), list],
   create: [validationReservation, asyncErrorBoundary(create)],
   reservationExists: [hasReservationId, reservationExists],
   read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],
-  update: [hasReservationId, reservationExists, asyncErrorBoundary(update)]
+  update: [hasReservationId, reservationExists, validateStatus, asyncErrorBoundary(update)],
 };

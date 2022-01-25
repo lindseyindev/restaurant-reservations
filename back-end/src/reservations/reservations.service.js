@@ -3,13 +3,13 @@ const knex = require("../db/connection");
 const tableName = "reservations";
 
 function create(newReservation) {
-  return knex("reservations")
+  return knex(tableName)
     .insert(newReservation, "*")
     .then((data) => data[0]);
 }
 
 function list(date) {
-  return knex("reservations")
+  return knex(tableName)
     .select("*")
     .where({ reservation_date: date })
     .orderBy("reservation_time");
@@ -21,11 +21,21 @@ function read(reservation_id) {
 
 function update(reservation_id, status) {
   return knex(tableName)
-  .select("*")
-  .where({reservation_id})
-  .update({status})
-  .returning("*")
-  .then(res => res[0])
+    .select("*")
+    .where({ reservation_id })
+    .update({ status })
+    .returning("*")
+    .then((res) => res[0]);
+}
+
+function search(mobile_number) {
+  return knex(tableName)
+    .select("*")
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
 }
 
 module.exports = {
@@ -33,4 +43,5 @@ module.exports = {
   create,
   list,
   update,
+  search,
 };
