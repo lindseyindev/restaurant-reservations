@@ -4,6 +4,8 @@ import {
     formatAsTime,
     formatAsDate,
   } from "../utils/date-time";
+  import ErrorAlert from "../layout/ErrorAlert";
+
   
 function Search() {
   const [number, setNumber] = useState("");
@@ -14,18 +16,20 @@ function Search() {
     setNumber(value);
   }
 
-  //   useEffect(submitSearch, [number]);
-//   failed consolelog
-//   .then((data) => {
-//     console.log(data)
-//     return setReservations(data);
-//     })
-
-  function submitSearch() {
+  function submitSearch(e) {
+      e.preventDefault()
     const abortController = new AbortController();
     setError(null);
+    setReservations([])
     search(number, abortController.signal)
-      .then(setReservations)
+      .then((response) => {
+          if (response.length){
+              return setReservations(response)
+          }
+          else {
+              setError({message: "No reservations found."})
+          }
+      })
       .catch(setError);
     return () => abortController.abort();
   }
@@ -69,14 +73,14 @@ function Search() {
   return (
     <div className="m-4 ">
       <h3>Find a reservation</h3>
-      <form onSubmit={(e) => submitSearch(e)}>
+      <form onSubmit={submitSearch}>
         <input
           className="appearance-none block w-1/4 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           name="mobile_number"
-          type="tel"
+          type="text"
           id="mobile_number"
           value={number}
-          onChange={(e) => changeHandler(e)}
+          onChange={changeHandler}
           placeholder="Enter a customer's phone number"
         />
         <button
@@ -86,12 +90,11 @@ function Search() {
           Find
         </button>
       </form>
-
-      {reservations.length > 0 ? (
+      <ErrorAlert error={error} /> 
         <table className="table-auto mx-4 flex-row border-separate border border-indigo-500">
           {displayReservations}
         </table>
-      ) : null}
+  
     </div>
   );
 }

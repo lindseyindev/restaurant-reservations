@@ -72,10 +72,12 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+
+  //tr wrapping all tds NO THS
   const displayReservations = reservations.map((reservation) => {
     const { reservation_id } = reservation;
     return (
-      <div className="p-2 m-4 hover:bg-yellow-200">
+      <tbody className="p-2 m-4 hover:bg-yellow-200">
         <tr className="p-2 m-2">
           <th>{`reservation id: ${reservation_id}`}</th>
         </tr>
@@ -116,7 +118,7 @@ function Dashboard({ date }) {
             </button>
           </a>
         ) : null}
-      </div>
+      </tbody>
     );
   });
 
