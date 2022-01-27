@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { search, updateStatus } from "../utils/api";
 import { formatAsTime, formatAsDate } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
-import {useHistory} from "react-router-dom"
 
 function Search() {
   const [number, setNumber] = useState("");
   const [error, setError] = useState("");
   const [reservations, setReservations] = useState([]);
-  const history = useHistory();
   function changeHandler({ target: { value } }) {
     setNumber(value);
   }

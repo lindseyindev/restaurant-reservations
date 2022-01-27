@@ -7,7 +7,7 @@ import CreateTables from "../Tables/CreateTables";
 import { today } from "../utils/date-time";
 import AssignSeat from "../Tables/AssignSeat";
 import Search from "../Reservations/Search";
-import Edit from "../Reservations/EditReservation"
+import EditReservation from "../Reservations/EditReservation"
 
 
 /**
@@ -42,7 +42,7 @@ function Routes() {
         <Search />
       </Route>
       <Route exact={true} path="/reservations/:reservation_id/edit">
-        <Edit />
+        <EditReservation />
       </Route>
       <Route>
         <NotFound />

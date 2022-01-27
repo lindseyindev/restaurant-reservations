@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservations } from "../utils/api";
 
-function NewReservations(
+function NewReservations({
   initialState = {
     first_name: "",
     last_name: "",
@@ -12,20 +11,20 @@ function NewReservations(
     people: 0,
   },
   submitHandler
-) {
+}) {
   const history = useHistory();
   const [reservation, setReservation] = useState(initialState);
 
   function changeHandler({ target: { name, value } }) {
-    setReservation((prevState) => ({
-      ...prevState,
+    setReservation((res) => ({
+      ...res,
       [name]: value,
     }));
   }
 
-  function formSubmit(e) {
+ function formSubmit(e) {
     e.preventDefault();
-    submitHandler(e, reservation);
+    submitHandler(e, reservation)
   }
 
   return (
@@ -42,7 +41,7 @@ function NewReservations(
             <input
               name="first_name"
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="first-name"
+              id="first_name"
               type="text"
               value={reservation.first_name}
               placeholder="First Name"

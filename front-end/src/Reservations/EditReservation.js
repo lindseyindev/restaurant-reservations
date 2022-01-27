@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { findReservation, editReservation } from "../utils/api";
 import Form from "./Form";
 
-function Edit() {
+function EditReservation() {
   const [error, setError] = useState(null);
   const [reservation, setReservation] = useState({});
-  const history = useHistory();
   const { reservation_id } = useParams();
 
   function loadReservation() {
@@ -19,15 +18,14 @@ function Edit() {
     return () => abortController.abort();
   }
 
-  useEffect(loadReservation, []);
+  useEffect(loadReservation, [reservation_id]);
 
-  function submitHandler(e) {
+  async function submitHandler(e, reservation) {
     e.preventDefault();
     let abortController = new AbortController();
     async function updateReservation() {
       try {
         await editReservation(reservation, abortController.signal);
-        // history.push(`/dashboard`);
       } catch (error) {
         setError(error);
       }
@@ -39,7 +37,15 @@ function Edit() {
   }
 
   
-  return <Form initialState={reservation} submitHandler={submitHandler} />;
+  return (
+    <div>
+      <h1 className="m-4">Edit Reservation</h1>
+      <ErrorAlert error={error} /> 
+
+      {reservation && <Form initialState={reservation} submitHandler={submitHandler} />}
+
+  </div>
+  )
 }
 
-export default Edit;
+export default EditReservation;
