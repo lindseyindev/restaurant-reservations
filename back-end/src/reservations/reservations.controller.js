@@ -14,7 +14,6 @@ function asDateString(date) {
 function today() {
   return asDateString(new Date());
 }
-//console.log(today()) 2022-01-20
 
 /**
  * List handler for reservation resources
@@ -22,11 +21,7 @@ function today() {
 
 async function list(req, res) {
   let data = await service.list(req.query.date);
-  console.log(data);
   data = data.filter((reservation) => reservation.status !== "finished");
-  // if(res.locals.reservation.status === "finished"){
-  //   res.status(200).json({data: {}})
-  //     }
   res.json({ data });
 }
 
