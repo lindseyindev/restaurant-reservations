@@ -43,10 +43,8 @@ function EditReservation() {
   
   return (
     <div>
-      {console.log(`from edit: ${reservation}`)}
       <h1 className="m-4">Edit Reservation</h1>
       <ErrorAlert error={error} /> 
-
       {reservation && <Form initialState={reservation} submitHandler={submitHandler} />}
 
   </div>

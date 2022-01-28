@@ -53,6 +53,7 @@ function AssignSeat() {
 
   return (
     <div className="font-Staatliches w-full h-full mt-20 p-20 text-center">
+  
       <ErrorAlert error={error} />
       <form className="text-2xl flex flex-col" onSubmit={submitHandler}>
         

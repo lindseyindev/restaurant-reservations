@@ -64,13 +64,14 @@ function Dashboard({ date }) {
     pushDate(nextOrPrev);
   }
 
-  function statusChanger(reservation_id, status) {
+  async function statusChanger(reservation_id, status) {
     const abortController = new AbortController();
-    updateStatus(reservation_id, status, abortController.signal).catch(
+    await updateStatus(reservation_id, status, abortController.signal).catch(
       setError
     );
     return () => abortController.abort();
   }
+
   async function handleCancelClick(e, reservation_id) {
     if (
       window.confirm(
@@ -121,14 +122,18 @@ function Dashboard({ date }) {
           </button>
         </td>
         <td className="p-2 m-2">
-        {reservation.status === "booked" ? (
-          <button
-            onClick={(e) => statusChanger(reservation.reservation_id, "seated")}
-            className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-          >
-            <a href={`/reservations/${reservation_id}/seat`}>Seat</a>
-          </button>
-        ) : "Unavailable"}
+          {reservation.status === "booked" ? (
+            <button
+              onClick={(e) =>
+                statusChanger(reservation.reservation_id, "seated")
+              }
+              className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            >
+              <a href={`/reservations/${reservation_id}/seat`}>Seat</a>
+            </button>
+          ) : (
+            "Unavailable"
+          )}
         </td>
       </tr>
     );
@@ -136,18 +141,18 @@ function Dashboard({ date }) {
 
   const displayTables = tables.map((table) => {
     return (
-      <tr className="p-2 m-2 hover:bg-gray-300 bg-gray-200" key={table.table_id}>
+      <tr
+        className="p-2 m-2 hover:bg-gray-300 bg-gray-200"
+        key={table.table_id}
+      >
         <td className="p-2 m-2">{table.table_id}</td>
-        <td className="p-2 m-2" className="p-2 m-2">
-          {table.table_name}
-        </td>
+        <td className="p-2 m-2">{table.table_name}</td>
         <td className="p-2 m-2">{table.capacity}</td>
         <td className="p-2 m-2" data-table-id-status={table.table_id}>
-          {table.reservation_id ? (
-            <Occupied table_id={table.table_id} />
-          ) : (
-            "Free"
-          )}
+          {table.reservation_id ? "Occupied" : "Free"}
+        </td>
+        <td>
+          {table.reservation_id ? <Occupied table_id={table.table_id} /> : null}
         </td>
       </tr>
     );
@@ -209,18 +214,27 @@ function Dashboard({ date }) {
                 <div className="border-b border-gray-200 shadow">
                   <table className="text-center text-xl divide-y divide-gray-300 ">
                     <thead className="font-Inconsolata bg-gray-50">
-              <tr>
-                <th className="px-6 py-2 text-l text-gray-500">ID</th>
-                <th className="px-6 py-2 text-l text-gray-500">Table Name</th>
-                <th className="px-6 py-2 text-l text-gray-500">Capacity</th>
-                <th className="px-6 py-2 text-l text-gray-500">Status</th>
-              </tr>
-            </thead>
-            <tbody className="font-Inconsolata">{displayTables}</tbody>
-          </table>
-          </div>
-          </div>
-          </div>
+                      <tr>
+                        <th className="px-6 py-2 text-l text-gray-500">ID</th>
+                        <th className="px-6 py-2 text-l text-gray-500">
+                          Table Name
+                        </th>
+                        <th className="px-6 py-2 text-l text-gray-500">
+                          Capacity
+                        </th>
+                        <th className="px-6 py-2 text-l text-gray-500">
+                          Status
+                        </th>
+                        <th className="px-6 py-2 text-l text-gray-500">
+                          Open Table
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="font-Inconsolata">{displayTables}</tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="m-auto">
