@@ -10,7 +10,7 @@ function NewReservations({
     reservation_time: "",
     people: 0,
   },
-  submitHandler
+  submitHandler,
 }) {
   const history = useHistory();
   const [reservation, setReservation] = useState(initialState);
@@ -22,14 +22,14 @@ function NewReservations({
     }));
   }
 
- function formSubmit(e) {
+  function formSubmit(e) {
     e.preventDefault();
-    submitHandler(e, reservation)
+    submitHandler(e, reservation);
   }
 
   return (
-    <div>
-      <form className="form w-full max-w-lg"  onSubmit={(e) => formSubmit(e)}>
+    <div className="w-full h-full container flex justify-center mx-auto">
+      <form className="form max-w-lg" onSubmit={(e) => formSubmit(e)}>
         <div className="flex flex-wrap mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
@@ -149,15 +149,25 @@ function NewReservations({
             />
           </div>
         </div>
-      <button
-        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-        type="submit"
-      >
-        Submit
-      </button>
-      <button type="button" onClick={(e) => history.goBack()}>
-        Cancel
-      </button>
+        <div className="flex flex-wrap mx-3 my-20 ">
+          <div className="text-center w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <button
+              className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-full md:w-1/2 px-3 mb-6 md:mb-0"
+              type="submit"
+            >
+              Submit
+            </button>
+            </div>
+            <div className="text-center w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <button
+                className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-full md:w-1/2 px-3 mb-6 md:mb-0"
+                type="button"
+                onClick={(e) => history.goBack()}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
       </form>
     </div>
   );

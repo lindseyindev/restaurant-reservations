@@ -5,7 +5,7 @@ import NotFound from "./NotFound";
 import CreateReservation from "../Reservations/CreateReservation";
 import CreateTables from "../Tables/CreateTables";
 import { today } from "../utils/date-time";
-import AssignSeat from "../Tables/AssignSeat";
+import AssignSeat from "../Tables/AssignTable";
 import Search from "../Reservations/Search";
 import EditReservation from "../Reservations/EditReservation"
 

@@ -89,7 +89,7 @@ function Dashboard({ date }) {
   const displayReservations = reservations.map((reservation) => {
     const { reservation_id } = reservation;
     return (
-      <tr className="p-2 m-4 hover:bg-yellow-200">
+      <tr className="p-2 m-4 hover:bg-gray-300">
         <td className="p-2 m-2">{reservation_id}</td>
         <td className="p-2 m-2">{reservation.first_name}</td>
         <td className="p-2 m-2">{reservation.last_name}</td>
@@ -101,8 +101,8 @@ function Dashboard({ date }) {
           {formatAsTime(reservation.reservation_time)}
         </td>
         <td className="mb-2">{reservation.people}</td>
-        <td>{reservation.status}</td>
-        <td>
+        <td className="p-2 m-2">{reservation.status}</td>
+        <td className="p-2 m-2">
           <a
             href={`/reservations/${reservation.reservation_id}/edit`}
             className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
@@ -111,7 +111,7 @@ function Dashboard({ date }) {
           </a>
         </td>
 
-        <td>
+        <td className="p-2 m-2">
           <button
             data-reservation-id-cancel={reservation.reservation_id}
             onClick={(e) => handleCancelClick(e, reservation.reservation_id)}
@@ -120,6 +120,7 @@ function Dashboard({ date }) {
             Cancel
           </button>
         </td>
+        <td className="p-2 m-2">
         {reservation.status === "booked" ? (
           <button
             onClick={(e) => statusChanger(reservation.reservation_id, "seated")}
@@ -127,18 +128,21 @@ function Dashboard({ date }) {
           >
             <a href={`/reservations/${reservation_id}/seat`}>Seat</a>
           </button>
-        ) : null}
+        ) : "Unavailable"}
+        </td>
       </tr>
     );
   });
 
-  const displayTables = tables.map((table, index) => {
+  const displayTables = tables.map((table) => {
     return (
-      <tr className="p-2 m-2 hover:bg-gray-200" key={table.table_id}>
-        <th scope="row">{table.table_id}</th>
-        <td>{table.table_name}</td>
-        <td>{table.capacity}</td>
-        <td data-table-id-status={table.table_id}>
+      <tr className="p-2 m-2 hover:bg-gray-300 bg-gray-200" key={table.table_id}>
+        <td className="p-2 m-2">{table.table_id}</td>
+        <td className="p-2 m-2" className="p-2 m-2">
+          {table.table_name}
+        </td>
+        <td className="p-2 m-2">{table.capacity}</td>
+        <td className="p-2 m-2" data-table-id-status={table.table_id}>
           {table.reservation_id ? (
             <Occupied table_id={table.table_id} />
           ) : (
@@ -150,53 +154,45 @@ function Dashboard({ date }) {
   });
 
   return (
-    <main className="min-h-screen m-12">
-      <h1 className="p-10">Dashboard</h1>
-      <div className="flex flex-col md:flex-row">
-        <div className="p-4 m-5 bg-emerald-500">
-          <h4 className="mb-4">{`Reservations for ${date}`}</h4>
+    <main className="font-Staatliches">
+      <h1 className="text-center text-6xl p-10">Dashboard</h1>
+      <div className="flex flex-col">
+        <div className="p-4 m-5 ">
+          <h4 className="text-center text-4xl mb-4">{`Reservations for ${date}`}</h4>
           <div className="container flex justify-center mx-auto">
             <div className="flex flex-col">
               <div className="w-full">
                 <div className="border-b border-gray-200 shadow">
-                  <table className="divide-y divide-gray-300 ">
-                    <thead className="bg-gray-50">
+                  <table className="text-center text-xl divide-y divide-gray-300 ">
+                    <thead className="font-Inconsolata bg-gray-50">
                       <tr>
-                        <th className="px-6 py-2 text-xs text-gray-500">ID</th>
-                        <th className="px-6 py-2 text-xs text-gray-500">
+                        <th className="px-6 py-2 text-l text-gray-500">ID</th>
+                        <th className="px-6 py-2 text-l text-gray-500">
                           First name
                         </th>
-                        <th className="px-6 py-2 text-xs text-gray-500">
+                        <th className="px-6 py-2 text-l text-gray-500">
                           Last Name
                         </th>
-                        <th className="px-6 py-2 text-xs text-gray-500">
+                        <th className="px-6 py-2 text-l text-gray-500">
                           Mobile Number
                         </th>
-                        <th className="px-6 py-2 text-xs text-gray-500">
-                          Date
-                        </th>
-                        <th className="px-6 py-2 text-xs text-gray-500">
-                          Time
-                        </th>
-                        <th className="px-6 py-2 text-xs text-gray-500">
+                        <th className="px-6 py-2 text-l text-gray-500">Date</th>
+                        <th className="px-6 py-2 text-l text-gray-500">Time</th>
+                        <th className="px-6 py-2 text-l text-gray-500">
                           Party Size
                         </th>
-                        <th className="px-6 py-2 text-xs text-gray-500">
+                        <th className="px-6 py-2 text-l text-gray-500">
                           Status
                         </th>
-                        <th className="px-6 py-2 text-xs text-gray-500">
-                          Edit
-                        </th>
+                        <th className="px-6 py-2 text-l text-gray-500">Edit</th>
 
-                        <th className="px-6 py-2 text-xs text-gray-500">
+                        <th className="px-6 py-2 text-l text-gray-500">
                           Cancel
                         </th>
-                        <th className="px-6 py-2 text-xs text-gray-500">
-                          Seat
-                        </th>
+                        <th className="px-6 py-2 text-l text-gray-500">Seat</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-300">
+                    <tbody className="bg-white divide-y divide-gray-300 font-Inconsolata">
                       {displayReservations}
                     </tbody>
                   </table>
@@ -205,14 +201,27 @@ function Dashboard({ date }) {
             </div>
           </div>
         </div>
-        <div className="p-4 m-5 bg-indigo-200">
-          {" "}
-          Tables
-          <table className="table-auto border-separate border border-emerald-500">
-            <tbody className="">
-            {displayTables}
-            </tbody>
+        <div className="p-4 m-5">
+          <h1 className="text-6xl text-center"> Tables</h1>
+          <div className="container flex justify-center mx-auto">
+            <div className="flex flex-col">
+              <div className="w-full">
+                <div className="border-b border-gray-200 shadow">
+                  <table className="text-center text-xl divide-y divide-gray-300 ">
+                    <thead className="font-Inconsolata bg-gray-50">
+              <tr>
+                <th className="px-6 py-2 text-l text-gray-500">ID</th>
+                <th className="px-6 py-2 text-l text-gray-500">Table Name</th>
+                <th className="px-6 py-2 text-l text-gray-500">Capacity</th>
+                <th className="px-6 py-2 text-l text-gray-500">Status</th>
+              </tr>
+            </thead>
+            <tbody className="font-Inconsolata">{displayTables}</tbody>
           </table>
+          </div>
+          </div>
+          </div>
+          </div>
         </div>
         <div className="m-auto">
           <button
@@ -221,6 +230,13 @@ function Dashboard({ date }) {
             onClick={(e) => handleClick(previous(date))}
           >
             Previous
+          </button>
+          <button
+            className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            type="button"
+            onClick={(e) => handleClick(today())}
+          >
+            Today
           </button>
           <button
             className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"

@@ -1,12 +1,12 @@
 {
-  "name": "Restaurant-Reservation-System-Backend",
+  "name": "Book a Table Backend",
   "author": "LindseyinDev",
   "version": "1.0.0",
-  "description": "Starter code for restaurant reservation backend",
+  "description": "backend api for restaurant reservations",
   "main": "src/server.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
+    "url": "https://github.com/lindseyindev/restaurant-reservations/tree/main/back-end",
     "directory": "/back-end"
   },
   "scripts": {
@@ -26,7 +26,6 @@
     "test:start:run": "run-s test:drop-database start "
   },
   "keywords": [],
-  "author": "",
   "license": "UNLICENSED",
   "dependencies": {
     "cors": "^2.8.5",
