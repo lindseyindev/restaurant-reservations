@@ -3,10 +3,11 @@ import { useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { findReservation, editReservation } from "../utils/api";
 import Form from "./Form";
+import {formatAsDate} from "../utils/date-time"
 
 function EditReservation() {
   const [error, setError] = useState(null);
-  const [reservation, setReservation] = useState({});
+  const [reservation, setReservation] = useState(null);
   const { reservation_id } = useParams();
 
   function loadReservation() {
@@ -36,9 +37,13 @@ function EditReservation() {
     };
   }
 
+  if(reservation){
+    reservation.reservation_date = formatAsDate(reservation.reservation_date)
+  }
   
   return (
     <div>
+      {console.log(`from edit: ${reservation}`)}
       <h1 className="m-4">Edit Reservation</h1>
       <ErrorAlert error={error} /> 
 

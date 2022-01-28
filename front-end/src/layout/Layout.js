@@ -13,7 +13,7 @@ import "./Layout.css";
  */
 function Layout() {
   return (
-    <div className="bg-gradient-to-t from-yellow-600 min-h-100">
+    <div className="bg-gradient-to-t from-yellow-600 to-orange-600 via-yellow-600 min-h-100">
       <div className="">
         <div className="">
           <Menu />

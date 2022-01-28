@@ -28,7 +28,10 @@ function NewReservations({
   }
 
   return (
+
+
     <div className="w-full h-full container flex justify-center mx-auto">
+{console.log("initial form state: ", initialState)}
       <form className="form max-w-lg" onSubmit={(e) => formSubmit(e)}>
         <div className="flex flex-wrap mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -44,7 +47,7 @@ function NewReservations({
               id="first_name"
               type="text"
               value={reservation.first_name}
-              placeholder="First Name"
+              placeholder={initialState.first_name ? initialState.first_name : "First Name"}
               onChange={(e) => changeHandler(e)}
               required
             />
