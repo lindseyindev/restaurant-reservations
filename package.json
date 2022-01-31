@@ -1,11 +1,11 @@
 {
-  "name": "starter-restaurant-reservation",
+  "name": "Book a Table",
   "version": "1.0.0",
-  "description": "Starter project restaurant reservation system",
+  "description": "restaurant reservation tracker and database system.",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
+    "url": "https://github.com/lindseyindev/restaurant-reservations"
   },
   "scripts": {
     "build": "npm -prefix front-end run build",
@@ -46,7 +46,7 @@
     "test:frontend:watch": "npm test --prefix ./front-end"
   },
   "keywords": [],
-  "author": "Lindsey Dinkel",
+  "author": "LindseyinDev",
   "license": "UNLICENSED",
   "devDependencies": {
     "tailwindcss": "^3.0.13"

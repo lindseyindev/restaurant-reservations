@@ -48,7 +48,7 @@ function hasValidFields(req, res, next) {
 
 function hasTableId(req, res, next) {
   const table = req.params.table_id;
-  console.log(table);
+  
   if (table) {
     res.locals.reservation = table;
     next();
@@ -177,6 +177,7 @@ function isAvailable(req, res, next) {
 }
 
 function isBooked(req, res, next) {
+  console.log(res.locals.reservation)
   if (res.locals.reservation.status === "booked") {
     next();
   } else {

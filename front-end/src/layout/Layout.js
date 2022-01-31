@@ -13,12 +13,12 @@ import "./Layout.css";
  */
 function Layout() {
   return (
-    <div className="">
+    <div className="bg-gradient-to-t from-yellow-600 to-orange-600 via-yellow-600 min-h-100">
       <div className="">
         <div className="">
           <Menu />
         </div>
-        <div className="">
+        <div className=" min-h-full">
           <Routes />
         </div>
       </div>

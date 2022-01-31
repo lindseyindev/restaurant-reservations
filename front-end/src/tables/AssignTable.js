@@ -52,23 +52,30 @@ function AssignSeat() {
   });
 
   return (
-    <div>
+    <div className="font-Staatliches w-full h-full mt-20 p-20 text-center">
+  
       <ErrorAlert error={error} />
-      <form onSubmit={submitHandler}>
-        <label htmlFor="tables">Assign Table:</label>
-        <select name="table_id" onChange={changeHandler} required>
+      <form className="text-2xl flex flex-col" onSubmit={submitHandler}>
+        
+        <label className="text-4xl" htmlFor="tables">Assign Table:</label>
+        <div className="text-center">
+        <select name="table_id" className="my-12 mx-4 w-1/3 font-Inconsolata text-center" onChange={changeHandler}
+        required>
           <option value=""> -- Please select a table -- </option>
           {tableOptions}
         </select>
+        </div>
+        <div className="text-center my-12">
         <button
-          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+          className="w-1/7 mx-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
           type="submit"
         >
           Submit
         </button>
-        <button type="button" onClick={(e) => history.goBack()}>
+        <button className="w-1/7 mx-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="button" onClick={(e) => history.goBack()}>
           Cancel
         </button>
+        </div>
       </form>
     </div>
   );

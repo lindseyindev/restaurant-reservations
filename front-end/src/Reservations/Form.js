@@ -1,52 +1,37 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservations } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
 
-function NewReservations() {
-  const initialState = {
-    "first_name": "",
-    "last_name": "",
-    "mobile_number": "",
-    "reservation_date": "",
-    "reservation_time": "",
-    "people": 0,
-  };
-
+function NewReservations({
+  initialState = {
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
+    people: 0,
+  },
+  submitHandler,
+}) {
   const history = useHistory();
-  const [error, setError] = useState(null);
   const [reservation, setReservation] = useState(initialState);
 
   function changeHandler({ target: { name, value } }) {
-    setReservation((prevState) => ({
-      ...prevState,
+    setReservation((res) => ({
+      ...res,
       [name]: value,
     }));
   }
-  function submitHandler(e) {
-  reservation.people = Number(reservation.people)
+
+  function formSubmit(e) {
     e.preventDefault();
-    let abortController = new AbortController();
-    async function newReservation() {
-      try {
-        await createReservations(reservation, abortController.signal)
-        let date = reservation.reservation_date
-        setReservation(initialState)
-        history.push(`/dashboard?date=${date}`)
-      } catch (error) {
-        setError(error);
-      }
-    }
-    newReservation();
-    return () => {
-      abortController.abort();
-    };
+    submitHandler(e, reservation);
   }
 
   return (
-    <div>
-      <ErrorAlert error={error} /> 
-      <form className="form w-full max-w-lg"  onSubmit={(e) => submitHandler(e)}>
+
+
+    <div className="w-full h-full container flex justify-center mx-auto">
+      <form className="form max-w-lg" onSubmit={formSubmit}>
         <div className="flex flex-wrap mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
@@ -58,11 +43,12 @@ function NewReservations() {
             <input
               name="first_name"
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="first-name"
+              id="first_name"
               type="text"
               value={reservation.first_name}
-              placeholder="First Name"
+              placeholder={initialState.first_name ? initialState.first_name : "First Name"}
               onChange={(e) => changeHandler(e)}
+              required
             />
             <p className="text-red-500 text-xs italic">
               Please fill out this field.
@@ -83,6 +69,7 @@ function NewReservations() {
               value={reservation.last_name}
               placeholder="Last Name"
               onChange={(e) => changeHandler(e)}
+              required
             />
           </div>
         </div>
@@ -102,6 +89,7 @@ function NewReservations() {
               id="mobile_number"
               value={reservation.mobile_number}
               onChange={(e) => changeHandler(e)}
+              required
             />
             <p className="text-gray-600 text-xs italic">
               Please use the format 000-000-0000{" "}
@@ -123,6 +111,7 @@ function NewReservations() {
               value={reservation.people}
               placeholder="1"
               onChange={(e) => changeHandler(e)}
+              required
             />
           </div>
         </div>
@@ -141,6 +130,7 @@ function NewReservations() {
               type="date"
               value={reservation.reservation_date}
               onChange={(e) => changeHandler(e)}
+              required
             />
           </div>
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -157,18 +147,30 @@ function NewReservations() {
               type="time"
               value={reservation.reservation_time}
               onChange={(e) => changeHandler(e)}
+              required
             />
           </div>
         </div>
-      <button
-        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-        type="submit"
-      >
-        Submit
-      </button>
-      <button type="button" onClick={(e) => history.goBack()}>
-        Cancel
-      </button>
+        <div className="flex flex-wrap mx-3 my-20 ">
+          <div className="text-center w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <button
+              className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-full md:w-1/2 px-3 mb-6 md:mb-0"
+              type="submit"
+            >
+              Submit
+            </button>
+            </div>
+            <div className="text-center w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <button
+              
+                className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-full md:w-1/2 px-3 mb-6 md:mb-0"
+                type="button"
+                onClick={(e) => history.goBack()}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
       </form>
     </div>
   );

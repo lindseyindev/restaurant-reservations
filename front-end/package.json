@@ -1,12 +1,12 @@
 {
-  "name": "Restaurant-Reservation-System-Frontend",
+  "name": "Book-a-Table-Frontend",
   "author": "LindseyinDev",
   "version": "1.0.0",
-  "description": "Front-end display for the restaurant reservations system",
+  "description": "client facing restaurant reservation tracker",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lindseyindev/restaurant-reservations",
+    "url": "https://github.com/lindseyindev/restaurant-reservations/tree/main/front-end",
     "directory": "/front-end"
   },
   "private": true,

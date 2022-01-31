@@ -50,13 +50,14 @@ function CreateTables(){
       }
     
       return (
-        <div>
+        <div className="font-Staatliches w-full h-full mt-20 p-20 text-center">
           <ErrorAlert error={error} /> 
-          <form className="form w-full max-w-lg"  onSubmit={(e) => submitHandler(e)}>
+          <div className="p-8 container text-center ">
+          <form  className="flex flex-col items-center justify-center" onSubmit={(e) => submitHandler(e)}>
             <div className="flex flex-wrap mx-3 mb-6">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2"
                   htmlFor="grid-first-name"
                 >
                   Table Name
@@ -77,7 +78,7 @@ function CreateTables(){
               </div>
               <div className="w-full md:w-1/2 px-3">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2"
                   htmlFor="grid-mobile-people"
                 >
                   Party Size
@@ -95,16 +96,24 @@ function CreateTables(){
                 />
               </div>
             </div>
+            <div className="flex flex-wrap mx-3 ">
+            <div className="text-center w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <button
             className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
             type="submit"
           >
             Submit
           </button>
-          <button type="button" onClick={(e) => history.goBack()}>
+          </div>
+          <div className="text-center w-full md:w-1/2 px-3 mb-6 md:mb-0"> 
+          <button             className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+ type="button" onClick={(e) => history.goBack()}>
             Cancel
           </button>
+          </div>
+          </div>
           </form>
+          </div>
         </div>
       );
 
