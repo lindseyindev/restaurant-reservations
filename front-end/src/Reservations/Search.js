@@ -36,7 +36,7 @@ function Search() {
     ) {
       const abortController = new AbortController();
       await updateStatus(reservation_id, "cancelled", abortController.signal);
-      window.location.reload(false);
+      // history.goBack()
       return () => abortController.abort();
     }
   }

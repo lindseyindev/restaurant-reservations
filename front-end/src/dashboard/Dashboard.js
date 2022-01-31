@@ -33,10 +33,10 @@ function Dashboard({ date }) {
 
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState([]);
 
   useEffect(loadReservations, [date]);
-  useEffect(loadTables, []);
+  useEffect(loadTables, [tables]);
 
   function loadReservations() {
     const abortController = new AbortController();
@@ -80,14 +80,17 @@ function Dashboard({ date }) {
     ) {
       const abortController = new AbortController();
       await updateStatus(reservation_id, "cancelled", abortController.signal);
-      window.location.reload(false);
+      history.push("/")
       return () => abortController.abort();
     }
   }
 
   //tr wrapping all tds NO THS
   //make head in main return with tr filled with ths for each column name
-  const displayReservations = reservations.map((reservation) => {
+  let filteredReservations = reservations.filter((reservation) => {
+   return reservation.status !== "finished" && reservation.status !== "cancelled"
+  })
+  const displayReservations = filteredReservations.map((reservation) => {
     const { reservation_id } = reservation;
     return (
       <tr className="p-2 m-4 hover:bg-gray-300">
@@ -102,7 +105,7 @@ function Dashboard({ date }) {
           {formatAsTime(reservation.reservation_time)}
         </td>
         <td className="mb-2">{reservation.people}</td>
-        <td className="p-2 m-2">{reservation.status}</td>
+        <td data-reservation-id-status={reservation.reservation_id} className="p-2 m-2">{reservation.status}</td>
         <td className="p-2 m-2">
           <a
             href={`/reservations/${reservation.reservation_id}/edit`}
@@ -132,7 +135,7 @@ function Dashboard({ date }) {
               <a href={`/reservations/${reservation_id}/seat`}>Seat</a>
             </button>
           ) : (
-            "Unavailable"
+            null
           )}
         </td>
       </tr>
@@ -262,7 +265,6 @@ function Dashboard({ date }) {
         </div>
       </div>
       <ErrorAlert error={error} />
-      {JSON.stringify(reservations)}
     </main>
   );
 }
