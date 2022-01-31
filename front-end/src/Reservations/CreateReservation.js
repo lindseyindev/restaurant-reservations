@@ -19,7 +19,7 @@ function NewReservations() {
   const [reservation, setReservation] = useState(initialState);
 
   
-  function submitHandler(e, reservation) {
+  async function submitHandler(e, reservation) {
   reservation.people = Number(reservation.people)
     e.preventDefault();
     let abortController = new AbortController();

@@ -36,7 +36,7 @@ function Dashboard({ date }) {
   const [error, setError] = useState([]);
 
   useEffect(loadReservations, [date]);
-  useEffect(loadTables, [tables]);
+  useEffect(loadTables, []);
 
   function loadReservations() {
     const abortController = new AbortController();
@@ -93,7 +93,7 @@ function Dashboard({ date }) {
   const displayReservations = filteredReservations.map((reservation) => {
     const { reservation_id } = reservation;
     return (
-      <tr className="p-2 m-4 hover:bg-gray-300">
+      <tr key={reservation.reservation_id} className="p-2 m-4 hover:bg-gray-300">
         <td className="p-2 m-2">{reservation_id}</td>
         <td className="p-2 m-2">{reservation.first_name}</td>
         <td className="p-2 m-2">{reservation.last_name}</td>
@@ -109,7 +109,7 @@ function Dashboard({ date }) {
         <td className="p-2 m-2">
           <a
             href={`/reservations/${reservation.reservation_id}/edit`}
-            className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px- border border-gray-400 rounded shadow"
           >
             Edit
           </a>
