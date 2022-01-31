@@ -3,9 +3,9 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import CreateReservation from "../Reservations/CreateReservation";
-import CreateTables from "../tables/CreateTables";
+import CreateTables from "../Tables/CreateTables";
 import { today } from "../utils/date-time";
-import AssignSeat from "../tables/AssignSeat.js"
+import AssignSeat from "../Tables/AssignSeat.js"
 import Search from "../Reservations/Search";
 import EditReservation from "../Reservations/EditReservation"
 
