@@ -26,6 +26,7 @@
     "test:start:run": "run-s test:drop-database start "
   },
   "keywords": [],
+  "author": "Lindsey Dinkel",
   "license": "UNLICENSED",
   "dependencies": {
     "cors": "^2.8.5",
