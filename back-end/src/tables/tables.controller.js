@@ -177,7 +177,7 @@ function isAvailable(req, res, next) {
 }
 
 function isBooked(req, res, next) {
-  console.log(res.locals.reservation)
+  
   if (res.locals.reservation.status === "booked") {
     next();
   } else {
