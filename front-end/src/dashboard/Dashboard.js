@@ -3,8 +3,6 @@ import { useHistory } from "react-router-dom";
 import { listReservations, listTables, updateStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
-//import {formatTime} from "../utils/format-reservation-time";
-//import formatAsDate from "../utils/format-reservation-date";
 import Occupied from "./Occupied";
 
 import {
@@ -15,11 +13,6 @@ import {
   formatAsDate,
 } from "../utils/date-time";
 
-/* Defines the dashboard page.
- * @param date
- *  the date for which the user wants to view reservations.
- * @returns {JSX.Element}
- */
 
 function Dashboard({ date }) {
   const query = useQuery();

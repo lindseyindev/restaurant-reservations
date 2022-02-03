@@ -91,7 +91,6 @@ export async function createReservations(reservation, signal) {
   );
 }
 
-//create reservation, using fetch json passing in an options ojbect with header, signal, method, body
 
 export async function createTables(table, signal) {
   const url = `${API_BASE_URL}/tables`;

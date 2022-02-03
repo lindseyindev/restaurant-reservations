@@ -1,7 +1,6 @@
 const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
-//Validation
 function hasValidFields(req, res, next) {
   const { data = {} } = req.body;
   const validFields = new Set(["table_name", "capacity", "reservation_id"]);

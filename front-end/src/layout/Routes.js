@@ -5,22 +5,11 @@ import NotFound from "./NotFound";
 import CreateReservation from "../Reservations/CreateReservation";
 import CreateTables from "../Tables/CreateTables";
 import { today } from "../utils/date-time";
-import AssignSeat from "../Tables/AssignSeat.js"
+import AssignSeat from "../Tables/AssignSeat.js";
 import Search from "../Reservations/Search";
-import EditReservation from "../Reservations/EditReservation"
+import EditReservation from "../Reservations/EditReservation";
 
-
-/**
- * Defines all the routes for the application.
- *
- * You will need to make changes to this file.
- *
- * @returns {JSX.Element}
- */
 function Routes() {
-
-
-  
   return (
     <Switch>
       <Route exact={true} path="/">
@@ -32,13 +21,13 @@ function Routes() {
       <Route path="/dashboard">
         <Dashboard date={today()} />
       </Route>
-      <Route exact={true} path="/reservations/new" >
+      <Route exact={true} path="/reservations/new">
         <CreateReservation />
       </Route>
-      <Route exact={true} path="/tables/new" >
+      <Route exact={true} path="/tables/new">
         <CreateTables />
       </Route>
-      <Route exact={true} path="/reservations/:reservation_id/seat" >
+      <Route exact={true} path="/reservations/:reservation_id/seat">
         <AssignSeat />
       </Route>
       <Route exact={true} path="/search">

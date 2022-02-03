@@ -1,7 +1,6 @@
 const knex = require("../db/connection");
 const tableName = "tables"
 
-// list by date
 function list() {
     return knex(tableName)
     .orderBy("table_name")
@@ -13,7 +12,6 @@ function create(table) {
     .then((createdTables) => createdTables[0]);
 }
 
-// seat is update
 function seat(table_id, reservation_id) {
     return knex.transaction(async (transaction) => {
         await knex("reservations")
