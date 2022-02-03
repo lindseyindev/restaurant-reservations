@@ -154,9 +154,9 @@ function Dashboard({ date }) {
         <div className="p-4 m-5 ">
           <h4 className="text-center text-4xl mb-4">{`Reservations for ${date}`}</h4>
           <div className="container flex justify-center mx-auto">
-            <div className="flex flex-col">
+            <div className="overflow-auto flex flex-col">
               <div className="w-full">
-                <div className="border-b border-gray-200 shadow">
+                <div className=" border-b border-gray-200 shadow">
                   <table className="text-center text-xl divide-y divide-gray-300 ">
                     <thead className="font-Inconsolata bg-gray-50">
                       <tr>

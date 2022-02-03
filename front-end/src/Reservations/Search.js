@@ -100,7 +100,7 @@ function Search() {
       <ErrorAlert error={error} />
       <h4 className="text-center text-4xl mb-4 font-Staatliches">{`Reservations for ${number}`}</h4>
       <div className="container flex justify-center mx-auto mb-20">
-        <div className="flex flex-col">
+        <div className="overflow-auto flex flex-col">
           <div className="w-full">
             <div className="border-b border-gray-200 shadow">
               <table className="text-center text-xl divide-y divide-gray-300 ">
