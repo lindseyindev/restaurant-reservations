@@ -56,15 +56,13 @@ function Search() {
         </td>
         <td className="mb-2">{reservation.people}</td>
         <td className="p-2 m-2">{reservation.status}</td>
-        <td>
-          <a
-            href={`/reservations/${reservation.reservation_id}/edit`}
-            className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-          >
-            Edit
-          </a>
+        <td className="p-2 m-2">
+          <div className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+            <a href={`/reservations/${reservation.reservation_id}/edit`}>
+              Edit
+            </a>
+          </div>
         </td>
-
         <td>
           <button
             data-reservation-id-cancel={reservation.reservation_id}

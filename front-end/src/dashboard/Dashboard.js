@@ -64,14 +64,6 @@ function Dashboard({ date }) {
     pushDate(nextOrPrev);
   }
 
-  async function statusChanger(reservation_id, status) {
-    const abortController = new AbortController();
-    await updateStatus(reservation_id, status, abortController.signal).catch(
-      setError
-    );
-    return () => abortController.abort();
-  }
-
   async function handleCancelClick(e, reservation_id) {
     if (
       window.confirm(
@@ -89,7 +81,6 @@ function Dashboard({ date }) {
       reservation.status !== "finished" && reservation.status !== "cancelled"
     );
   });
-
 
   const displayReservations = filteredReservations.map((reservation) => {
     const { reservation_id } = reservation;
@@ -111,19 +102,17 @@ function Dashboard({ date }) {
         <td className="mb-2">{reservation.people}</td>
         <td
           data-reservation-id-status={reservation.reservation_id}
-          className="p-2 m-2"
+          className="p-2 m-1"
         >
           {reservation.status}
         </td>
         <td className="p-2 m-2">
-          <a
-            href={`/reservations/${reservation.reservation_id}/edit`}
-            className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px- border border-gray-400 rounded shadow"
-          >
-            Edit
-          </a>
+          <div className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+            <a href={`/reservations/${reservation.reservation_id}/edit`}>
+              Edit
+            </a>
+          </div>
         </td>
-
         <td className="p-2 m-2">
           <button
             data-reservation-id-cancel={reservation.reservation_id}
@@ -135,9 +124,7 @@ function Dashboard({ date }) {
         </td>
         <td className="p-2 m-2">
           {reservation.status === "booked" ? (
-            <div
-              className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-            >
+            <div className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
               <a href={`/reservations/${reservation_id}/seat`}>Seat</a>
             </div>
           ) : null}

@@ -1,6 +1,6 @@
 # <div align="center" >Book a Table Application </div>
 
-## Full-stack application to track tables and reservations for a restaurant.
+## Full-stack application to track restaurant tables and reservations.
 
 <br>
 
@@ -9,6 +9,9 @@
 - [Summary](#Summary)
 - [User Guide](#User-Guide)
 - [API Documentation](#API-Documentation)
+- [Technologies](#Technologies)
+- [Installation](#Installation)
+- [Questions](#Questions)
   <br>
 
 ## Summary
@@ -30,14 +33,27 @@
 
 ## User Guide
 
-<br>
+<br></br>
 
-Pictures?
--Dashboard
--Create new form
--Create new table
--search for reservation
--seat a reservation
+### The Dashboard displays all current reservations by day with the default set to today's date. The dashboard also shows current tables in the restaurant with a corresponding status. From the dashboard there are links or buttons attached to each reservation and table allowing users to modify reservations, assign reservations to a table, clear a reservation from a table, or cancel a reservation.
+
+![Dashboard](./screenshots/dashboard.png)
+
+<br></br>
+
+### The new reservation form allows users to add reservation details to the database. Once a reservation is added the user is redirected to the dashboard for the date of that reservation so they can see the newly added details.
+
+![new Reservation Form](./screenshots/newReservationForm.png)
+<br></br>
+
+### The search page allows users to input a phone number and return a list of all reservations that have been made under that phone number.
+
+![search by phone number](./screenshots/searchByNumber.png)
+<br></br>
+
+### The create table page allows users to add a new table to the database with a corresponding name and capacity field.
+
+![create a table form](./screenshots/createTableForm.png)
 
 <br>
 
@@ -56,11 +72,81 @@ Pictures?
 | /tables/:table_id/seat                   | PUT    | 200         | Assigns a reservation_id to the table that matches the ID in the parameters         |
 | /tables/:table_id/seat                   | DELETE | 200         | Removes the reservation ID from the table and updates the status to be unoccupied   |
 
-### /reservations example
+### Making a GET request to /reservations?date=2022-02-02 will return: 
+```{
+    "data": [
+        {
+            "reservation_id": 28,
+            "first_name": "Jackson",
+            "last_name": "Catlock",
+            "mobile_number": "12345688967",
+            "reservation_date": "2022-02-03T08:00:00.000Z",
+            "reservation_time": "12:00:00",
+            "people": 1,
+            "status": "booked",
+            "created_at": "2022-02-02T20:12:55.109Z",
+            "updated_at": "2022-02-02T20:12:55.109Z"
+        }
+    ]
+}
+```
 
-### /tables example
+### Making a GET request to the /tables route will return: 
+```{
+    "data": [
+        {
+            "table_id": 3,
+            "table_name": "#1",
+            "capacity": 6,
+            "reservation_id": null,
+            "created_at": "2022-01-24T15:11:25.529Z",
+            "updated_at": "2022-01-24T15:11:25.529Z"
+        },
+        {
+            "table_id": 4,
+            "table_name": "#2",
+            "capacity": 6,
+            "reservation_id": null,
+            "created_at": "2022-01-24T15:11:25.529Z",
+            "updated_at": "2022-01-24T15:11:25.529Z"
+        },
+        {
+            "table_id": 1,
+            "table_name": "Bar #1",
+            "capacity": 1,
+            "reservation_id": null,
+            "created_at": "2022-01-24T15:11:25.529Z",
+            "updated_at": "2022-01-24T15:11:25.529Z"
+        },
+        {
+            "table_id": 2,
+            "table_name": "Bar #2",
+            "capacity": 1,
+            "reservation_id": null,
+            "created_at": "2022-01-24T15:11:25.529Z",
+            "updated_at": "2022-01-24T15:11:25.529Z"
+        },
+        {
+            "table_id": 8,
+            "table_name": "Catio",
+            "capacity": 8,
+            "reservation_id": null,
+            "created_at": "2022-02-02T20:02:55.354Z",
+            "updated_at": "2022-02-02T20:02:55.354Z"
+        },
+        {
+            "table_id": 7,
+            "table_name": "Tree Top #1",
+            "capacity": 2,
+            "reservation_id": null,
+            "created_at": "2022-02-02T20:02:34.831Z",
+            "updated_at": "2022-02-02T20:02:34.831Z"
+        }
+    ]
+} 
+```
 
-<br>
+<br></br>
 
 ## Technologies
 
@@ -75,12 +161,23 @@ Pictures?
 - CSS
 - Vercel
 - Heroku
-
+<br></br>
 ## Installation
+<br></br>
 
 #### Backend:
 
-1. Navigate to back-end and install dependencies using `npm install`
-2. Add PostgreSQL database credentials to your environment - you
+1. Navigate to the back-end folder and install dependencies using `npm install`
+2. Add PostgreSQL database credentials to your environment, a sample .env file is available to reference.
+3. Migrate and seed tables using `npx knex migrate:make` and `npx knex seed:run`
+4. Start locally using `npm run start`
 
-Navigate to front-end and install dependencies using `npm install`
+#### Frontend:
+
+1. Navigate to the front-end folder and install dependencies using `npm install`
+2. Ensure that your backend URL is referenced correctly in your environment, there is a sample .env file available to reference.
+3. Start locally using `npm run start`
+<br></br>
+
+## Questions
+Questions? Reach out at [github.com/lindseyindev](github.com/lindseyindev)
