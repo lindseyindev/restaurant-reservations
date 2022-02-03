@@ -80,20 +80,24 @@ function Dashboard({ date }) {
     ) {
       const abortController = new AbortController();
       await updateStatus(reservation_id, "cancelled", abortController.signal);
-      history.push("/")
+      history.push("/");
       return () => abortController.abort();
     }
   }
-
-  //tr wrapping all tds NO THS
-  //make head in main return with tr filled with ths for each column name
   let filteredReservations = reservations.filter((reservation) => {
-   return reservation.status !== "finished" && reservation.status !== "cancelled"
-  })
+    return (
+      reservation.status !== "finished" && reservation.status !== "cancelled"
+    );
+  });
+
+
   const displayReservations = filteredReservations.map((reservation) => {
     const { reservation_id } = reservation;
     return (
-      <tr key={reservation.reservation_id} className="p-2 m-4 hover:bg-gray-300">
+      <tr
+        key={reservation.reservation_id}
+        className="p-2 m-4 hover:bg-gray-300"
+      >
         <td className="p-2 m-2">{reservation_id}</td>
         <td className="p-2 m-2">{reservation.first_name}</td>
         <td className="p-2 m-2">{reservation.last_name}</td>
@@ -105,7 +109,12 @@ function Dashboard({ date }) {
           {formatAsTime(reservation.reservation_time)}
         </td>
         <td className="mb-2">{reservation.people}</td>
-        <td data-reservation-id-status={reservation.reservation_id} className="p-2 m-2">{reservation.status}</td>
+        <td
+          data-reservation-id-status={reservation.reservation_id}
+          className="p-2 m-2"
+        >
+          {reservation.status}
+        </td>
         <td className="p-2 m-2">
           <a
             href={`/reservations/${reservation.reservation_id}/edit`}
@@ -126,23 +135,19 @@ function Dashboard({ date }) {
         </td>
         <td className="p-2 m-2">
           {reservation.status === "booked" ? (
-            <button
-              onClick={(e) =>
-                statusChanger(reservation.reservation_id, "seated")
-              }
+            <div
               className="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
             >
               <a href={`/reservations/${reservation_id}/seat`}>Seat</a>
-            </button>
-          ) : (
-            null
-          )}
+            </div>
+          ) : null}
         </td>
       </tr>
     );
   });
 
-  const displayTables = tables.map((table) => {
+  let displayTables = tables.map((table) => {
+    console.log(table);
     return (
       <tr
         className="p-2 m-2 hover:bg-gray-300 bg-gray-200"
@@ -162,8 +167,9 @@ function Dashboard({ date }) {
   });
 
   return (
-    <main className="font-Staatliches">
+    <main className="min-h-screen font-Staatliches">
       <h1 className="text-center text-6xl p-10">Dashboard</h1>
+      <ErrorAlert error={error} />
       <div className="flex flex-col">
         <div className="p-4 m-5 ">
           <h4 className="text-center text-4xl mb-4">{`Reservations for ${date}`}</h4>
@@ -210,7 +216,8 @@ function Dashboard({ date }) {
           </div>
         </div>
         <div className="p-4 m-5">
-          <h1 className="text-6xl text-center"> Tables</h1>
+          <h1 className="text-4xl text-center"> Tables</h1>
+          <br></br>
           <div className="container flex justify-center mx-auto">
             <div className="flex flex-col">
               <div className="w-full">
@@ -240,7 +247,7 @@ function Dashboard({ date }) {
             </div>
           </div>
         </div>
-        <div className="m-auto">
+        <div className="m-auto pb-20">
           <button
             className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
             type="button"
@@ -264,7 +271,6 @@ function Dashboard({ date }) {
           </button>
         </div>
       </div>
-      <ErrorAlert error={error} />
     </main>
   );
 }

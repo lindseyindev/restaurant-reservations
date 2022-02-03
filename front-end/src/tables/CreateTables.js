@@ -50,7 +50,7 @@ function CreateTables(){
       }
     
       return (
-        <div className="font-Staatliches w-full h-full mt-20 p-20 text-center">
+        <div className="font-Staatliches w-full min-h-screen mt-20 p-20 text-center">
           <ErrorAlert error={error} /> 
           <div className="p-8 container text-center ">
           <form  className="flex flex-col items-center justify-center" onSubmit={(e) => submitHandler(e)}>

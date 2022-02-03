@@ -79,7 +79,7 @@ function Search() {
   });
 
   return (
-    <div className="h-full w-full flex items-center justify-center">
+    <div className="min-h-screen w-full flex items-center justify-center">
       <div className="p-8 container text-center ">
       <h3 className="text-3xl p-8 font-Staatliches">Find a reservation</h3>
       <form onSubmit={submitSearch} className="flex flex-col items-center justify-center">

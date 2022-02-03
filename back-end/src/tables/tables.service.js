@@ -1,5 +1,4 @@
 const knex = require("../db/connection");
-
 const tableName = "tables"
 
 // list by date
@@ -37,7 +36,6 @@ function read(table_id) {
         .first();
 }
 
-// checking if table is free or not
 function occupy(table) {
     return knex.transaction(async (transaction) => {
       await knex("reservations")
@@ -60,28 +58,3 @@ module.exports = {
   read,
   occupy
 };
-
-//
-
-
-// function list(){
-//     return knex("tables")
-//     .select("*")
-//     .orderBy("table_name")
-// }
-
-// function update({tableId, reservationId}){
-// return knex("tables")
-//     .select("*")
-//     .where({"table_id": tableId})
-//     .update({"reservation_id": reservationId})
-//     .returning("*")
-//     .then((data) => data[0])
-// }
-
-
-
-// module.exports = {
-//     list, update,
-
-// }

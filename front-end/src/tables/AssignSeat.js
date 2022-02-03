@@ -19,10 +19,10 @@ function AssignSeat() {
 
   useEffect(loadTables, []);
 
-  function loadTables() {
+   function loadTables() {
     const abortController = new AbortController();
     setError(null);
-    listTables(abortController.signal).then(setTables).catch(setError);
+   listTables(abortController.signal).then(setTables).catch(setError);
     return () => abortController.abort();
   }
 

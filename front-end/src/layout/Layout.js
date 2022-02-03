@@ -18,7 +18,7 @@ function Layout() {
         <div className="">
           <Menu />
         </div>
-        <div className=" min-h-full">
+        <div className="min-h-full">
           <Routes />
         </div>
       </div>
