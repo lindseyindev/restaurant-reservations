@@ -166,6 +166,6 @@ module.exports = {
   ],
   read: [hasTableId, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
-  seat: [tableExists, isAvailable, hasCapacity, isBooked, seat],
-  occupy: [tableExists, isOccupied, occupy],
+  seat: [tableExists, isAvailable, hasCapacity, isBooked, asyncErrorBoundary(seat)],
+  occupy: [tableExists, isOccupied, asyncErrorBoundary(occupy)],
 };

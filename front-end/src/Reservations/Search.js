@@ -43,7 +43,7 @@ function Search() {
   const displayReservations = reservations.map((reservation) => {
     const { reservation_id } = reservation;
     return (
-      <tr className="p-2 m-4 hover:bg-gray-300">
+      <tr key={reservation_id} className="p-2 m-4 hover:bg-gray-300">
         <td className="p-2 m-2">{reservation_id}</td>
         <td className="p-2 m-2">{reservation.first_name}</td>
         <td className="p-2 m-2">{reservation.last_name}</td>
